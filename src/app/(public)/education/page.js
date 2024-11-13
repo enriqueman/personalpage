@@ -1,5 +1,5 @@
 // app/education/page.js
-import EducationSection from '../../components/educationSection'
+import EducationSection from '../../../components/educationSection'
 
 export default function EducationPage() {
   return (

@@ -1,5 +1,5 @@
 // app/skills/page.js
-import SkillsSection from '../../components/skillsSection'
+import SkillsSection from '../../../components/skillsSection'
 
 export default function SkillsPage() {
   return (
