@@ -1,0 +1,420 @@
+name: Pipeline
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'develop'
+      - 'feature**'
+  delete:
+    branches:
+      - 'feature**'
+
+env:
+  PIPELINE_USER_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  PIPELINE_USER_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  USER_ACCESS_KEY_ID: ${{ secrets.USER_AWS_ACCESS_KEY_ID }}
+  USER_SECRET_ACCESS_KEY: ${{ secrets.USER_AWS_SECRET_ACCESS_KEY}}
+
+  SAM_TEMPLATE: template.yaml
+  TESTING_STACK_NAME: sam-app-personal-page-prod
+  TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::471112837636:role/aws-sam-cli-managed-personal--PipelineExecutionRole-6bLdiwjc2pGP
+  TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::471112837636:role/aws-sam-cli-managed-perso-CloudFormationExecutionRo-qldlJZavVENT
+  TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-personal-accou-artifactsbucket-lvukcyulkbfh
+  # If there are functions with "Image" PackageType in your template,
+  # uncomment the line below and add "--image-repository ${TESTING_IMAGE_REPOSITORY}" to
+  # testing "sam package" and "sam deploy" commands.
+  # TESTING_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
+  TESTING_REGION: us-east-1
+  PROD_STACK_NAME: sam-app-personal-page-dev
+  PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::471112837636:role/aws-sam-cli-managed-personal--PipelineExecutionRole-w1ceHg3Srqie
+  PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::471112837636:role/aws-sam-cli-managed-perso-CloudFormationExecutionRo-LVTGVTJzrPve
+  PROD_ARTIFACTS_BUCKET: aws-sam-cli-managed-personal-accou-artifactsbucket-7twnozkcwdt3
+  # If there are functions with "Image" PackageType in your template,
+  # uncomment the line below and add "--image-repository ${PROD_IMAGE_REPOSITORY}" to
+  # prod "sam package" and "sam deploy" commands.
+  # PROD_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
+  PROD_REGION: us-east-1
+
+jobs:
+  # test:
+  #   if: github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: |
+  #         # trigger the tests here
+#Feature
+  delete-feature:
+    if: startsWith(github.event.ref, 'feature') && github.event_name == 'delete'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Assume the testing pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Delete feature branch stack
+        env:
+          FEATURE_BRANCH_NAME: ${{ github.event.ref }}
+        run: |
+          sam delete \
+            --stack-name $(echo ${FEATURE_BRANCH_NAME##*/} | tr -cd '[a-zA-Z0-9-]') \
+            --region ${TESTING_REGION} \
+            --no-prompts
+
+  build-and-deploy-feature:
+    # this stage is triggered only for feature branches (feature*),
+    # which will build the stack and deploy to a stack named with branch name.
+    # https://github.com/actions/setup-python
+    # https://github.com/aws-actions/configure-aws-credentials#notice-node12-deprecation-warning
+    if: startsWith(github.ref, 'refs/heads/feature')
+    # needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+      - run: sam build --template ${SAM_TEMPLATE} --use-container
+
+      - name: Assume the testing pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: feature-deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Deploy to feature stack in the testing account
+        shell: bash
+        run: |
+          sam deploy --stack-name $(echo ${GITHUB_REF##*/} | tr -cd '[a-zA-Z0-9-]') \
+            --capabilities CAPABILITY_IAM \
+            --region ${TESTING_REGION} \
+            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --no-fail-on-empty-changeset \
+            --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
+
+
+#Prod
+  build-and-package-prod:
+    if: github.ref == 'refs/heads/main'
+    # needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Build resources
+        run: sam build --template ${SAM_TEMPLATE} --use-container
+
+      - name: Assume the prod pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.PROD_REGION }}
+          role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: prod-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Upload artifacts to production artifact buckets
+        run: |
+          sam package \
+            --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
+            --region ${PROD_REGION} \
+            --output-template-file packaged-prod.yaml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packaged-prod.yaml
+          path: packaged-prod.yaml
+
+  deploy-prod:
+    if: github.ref == 'refs/heads/main'
+    needs: [build-and-package-prod]
+    runs-on: ubuntu-latest
+    outputs:
+      cloudfront_distribution_id: ${{ steps.get_outputs.outputs.cloudfront_distribution_id }}
+      next_bucket: ${{ steps.get_outputs.outputs.next_bucket }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaged-prod.yaml
+
+      - name: Assume the prod pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.PROD_REGION }}
+          role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: prod-deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Deploy to production account
+        run: |
+          sam deploy --stack-name ${PROD_STACK_NAME} \
+            --template packaged-prod.yaml \
+            --capabilities CAPABILITY_IAM \
+            --region ${PROD_REGION} \
+            --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
+            --no-fail-on-empty-changeset \
+            --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
+
+      - name: Get CloudFormation Outputs
+        id: get_outputs
+        run: |
+          # Get outputs CloudFormation stack
+          OUTPUTS=$(aws cloudformation describe-stacks --stack-name ${PROD_STACK_NAME} --query "Stacks[0].Outputs" --output json)
+        
+          # Extraer el CloudFront Distribution ID y el S3 Bucket ARN
+          CLOUDFRONT_DISTRIBUTION_ID=$(echo $OUTPUTS | jq -r '.[] | select(.OutputKey=="NextDistribution") | .OutputValue')
+          NEXT_BUCKET_ARN=$(echo $OUTPUTS | jq -r '.[] | select(.OutputKey=="NextBucket") | .OutputValue')
+          CLOUDFRONT_DOMAIN=$(echo $OUTPUTS | jq -r '.[] | select(.OutputKey=="CloudFrontDomain") | .OutputValue')
+
+          # Extraer solo el nombre del bucket del ARN
+          NEXT_BUCKET=$(echo $NEXT_BUCKET_ARN | awk -F':' '{print $NF}')
+          
+          # Guardar los outputs
+          echo "cloudfront_distribution_id=$CLOUDFRONT_DISTRIBUTION_ID" >> $GITHUB_OUTPUT
+          echo "next_bucket=$NEXT_BUCKET" >> $GITHUB_OUTPUT
+          echo "cloudfront_domain=$CLOUDFRONT_DOMAIN" >> $GITHUB_OUTPUT
+
+      - name: Debug Outputs
+        run: |
+          echo "CloudFront Distribution ID: ${{ steps.get_outputs.outputs.cloudfront_distribution_id }}"
+          echo "Next Bucket: ${{ steps.get_outputs.outputs.next_bucket }}"
+          echo "CloudFront Domain: ${{ steps.get_outputs.outputs.cloudfront_domain }}"
+          echo "Aplicación disponible en: https://${{ steps.get_outputs.outputs.cloudfront_domain }}"
+
+    
+  deploy-next-files-prod:
+      if: github.ref == 'refs/heads/main'
+      needs: [build-and-package-prod,deploy-prod]
+      runs-on: ubuntu-latest
+      steps:
+
+        - name: Debug Environment Variables
+          run: |
+            echo "CloudFront Distribution ID: ${{  needs.deploy-prod.outputs.cloudfront_distribution_id  }}"
+            echo "Next Bucket: ${{ needs.deploy-prod.outputs.next_bucket }}"
+
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Set up Node.js
+          uses: actions/setup-node@v2
+          with:
+            node-version: '18'
+
+        - name: Install dependencies
+          run: npm install
+
+        - name: Export Next.js app
+          run: npm run build
+
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ env.USER_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ env.USER_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+      
+        - name: Sync files to S3
+          run: |
+           BUCKET_NAME=${{ needs.deploy-prod.outputs.next_bucket}}
+           aws s3 sync  ./out/ s3://$BUCKET_NAME --delete
+
+        - uses: badsyntax/github-action-aws-cloudfront@master
+          name: Invalidate CloudFront Cache
+          id: invalidate-cloudfront-cache
+          with:
+            distribution-id: ${{needs.deploy-prod.outputs.cloudfront_distribution_id}}
+            aws-region: 'us-east-1'
+            origin-prefix: 'root'
+            include-origin-prefix: true
+            invalidate-paths: '/index.html,/error.html,/'
+            default-root-object: 'index.html'
+
+
+
+#dev
+  build-and-package-dev:
+    if: github.ref == 'refs/heads/develop'
+    # needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Build resources
+        run: sam build --template ${SAM_TEMPLATE} --use-container
+
+      - name: Assume the testing pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Upload artifacts to testing artifact buckets
+        run: |
+          sam package \
+            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --region ${TESTING_REGION} \
+            --output-template-file packaged-testing.yaml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packaged-testing.yaml
+          path: packaged-testing.yaml
+
+
+  deploy-testing-dev:
+    if: github.ref == 'refs/heads/develop'
+    needs: [build-and-package-dev]
+    runs-on: ubuntu-latest
+    outputs:
+      cloudfront_distribution_id: ${{ steps.get_outputs.outputs.cloudfront_distribution_id }}
+      next_bucket: ${{ steps.get_outputs.outputs.next_bucket }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaged-testing.yaml
+
+      - name: Assume the testing pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Deploy to testing account
+        run: |
+          sam deploy --stack-name ${TESTING_STACK_NAME} \
+            --template packaged-testing.yaml \
+            --capabilities CAPABILITY_IAM \
+            --region ${TESTING_REGION} \
+            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --no-fail-on-empty-changeset \
+            --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
+
+      - name: Get CloudFormation Outputs
+        id: get_outputs
+        run: |
+          # Obtener los outputs del stack de CloudFormation
+          OUTPUTS=$(aws cloudformation describe-stacks --stack-name ${TESTING_STACK_NAME} --query "Stacks[0].Outputs" --output json)
+        
+          # Extraer el CloudFront Distribution ID y el S3 Bucket ARN
+          CLOUDFRONT_DISTRIBUTION_ID=$(echo $OUTPUTS | jq -r '.[] | select(.OutputKey=="NextDistribution") | .OutputValue')
+          NEXT_BUCKET_ARN=$(echo $OUTPUTS | jq -r '.[] | select(.OutputKey=="NextBucket") | .OutputValue')
+          CLOUDFRONT_DOMAIN=$(echo $OUTPUTS | jq -r '.[] | select(.OutputKey=="CloudFrontDomain") | .OutputValue')
+
+          # Extraer solo el nombre del bucket del ARN
+          NEXT_BUCKET=$(echo $NEXT_BUCKET_ARN | awk -F':' '{print $NF}')
+          
+          # Guardar los outputs
+          echo "cloudfront_distribution_id=$CLOUDFRONT_DISTRIBUTION_ID" >> $GITHUB_OUTPUT
+          echo "next_bucket=$NEXT_BUCKET" >> $GITHUB_OUTPUT
+          echo "cloudfront_domain=$CLOUDFRONT_DOMAIN" >> $GITHUB_OUTPUT
+
+
+      - name: Debug Outputs
+        run: |
+          echo "CloudFront Distribution ID: ${{ steps.get_outputs.outputs.cloudfront_distribution_id }}"
+          echo "Next Bucket: ${{ steps.get_outputs.outputs.next_bucket }}"
+          echo "CloudFront Domain: ${{ steps.get_outputs.outputs.cloudfront_domain }}"
+          echo "Tu aplicación estará disponible en: https://${{ steps.get_outputs.outputs.cloudfront_domain }}"
+
+
+  deploy-next-files-dev:
+    if: github.ref == 'refs/heads/develop'
+    needs: [build-and-package-dev,deploy-testing-dev]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Debug Environment Variables
+        run: |
+          echo "CloudFront Distribution ID: ${{  needs.deploy-testing-dev.outputs.cloudfront_distribution_id  }}"
+          echo "Next Bucket: ${{ needs.deploy-testing-dev.outputs.next_bucket }}"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Export Next.js app
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.USER_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+    
+      - name: Sync files to S3
+        run: |
+         BUCKET_NAME=${{ needs.deploy-testing-dev.outputs.next_bucket}}
+         aws s3 sync  ./out/ s3://$BUCKET_NAME --delete
+        
+        # |
+        #  BUCKET_NAME=${{ steps.get_outputs.outputs.next_bucket }}
+        #  aws s3 sync  ./out/ s3://$BUCKET_NAME --delete
+          
+      # run: aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}   --paths "/*"  --InvalidationBatch '{"Paths":{"Quantity":1,"Items":["/*"]},"CallerReference":"'$(date +%s)'"}'
+      - uses: badsyntax/github-action-aws-cloudfront@master
+        name: Invalidate CloudFront Cache
+        id: invalidate-cloudfront-cache
+        with:
+          distribution-id: ${{needs.deploy-testing-dev.outputs.cloudfront_distribution_id}}
+          aws-region: 'us-east-1'
+          origin-prefix: 'root'
+          include-origin-prefix: true
+          invalidate-paths: '/index.html,/error.html,/'
+          default-root-object: 'index.html'
