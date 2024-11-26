@@ -3,6 +3,13 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   Serverless AWS SPA
 
+# Parameters:
+#   NextDistributionName:
+#     Type: String
+#     Default: NextBucket
+  
+  
+
 Resources:
         
   NextBucket:
