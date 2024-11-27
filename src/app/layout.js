@@ -7,8 +7,12 @@ import Sidebar from '../components/sidebar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Hoja de Vida de Cesar Enrique Manzano Velasco',
+  title: 'Enrique Manzano',
   description: 'Ingeniero en electrónica y telecomunicaciones, desarrollador web y especialista en IA',
+  icons: {
+    icon: '/svg.svg', 
+   
+  },
 }
 
 export default function RootLayout({ children }) {
