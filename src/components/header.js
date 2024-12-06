@@ -9,10 +9,10 @@ export default function Header() {
 
   const navItems = [
     { name: 'Inicio', path: '/' },
-    { name: 'Experiencia', path: '/experience/' },
-    { name: 'Educación', path: '/education/' },
-    { name: 'Habilidades', path: '/skills/' },
-    { name: 'Proyectos', path: '/projects/' },
+    { name: 'Experiencia', path: '/experience' },
+    { name: 'Educación', path: '/education' },
+    { name: 'Habilidades', path: '/skills' },
+    { name: 'Proyectos', path: '/projects' },
   ];
 
   return (
