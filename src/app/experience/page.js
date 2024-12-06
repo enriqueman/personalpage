@@ -13,7 +13,7 @@ export default function Experience() {
         description="Desarrollador de proyectos web usando tecnologías web como NodeJS y React; miembro del equipo de innovación para el desarrollo de agentes con inteligencia Artificial generativa, implementado en canales como Google chat, Microsoft teams y Slack, haciendo uso de tecnologías como RAG y serverless"
       />
 
-      <h1 className="text-3xl font-bold text-center mt-20 mb-6">
+      <h1 className="text-3xl font-bold text-center mt-10 mb-6">
         Experiencia Académica
       </h1>
 
