@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
         <div className="flex flex-col min-h-screen">
           <Header />
           <div className="flex flex-1">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <main className="flex-1 p-6">{children}</main>
           </div>
           <Footer />

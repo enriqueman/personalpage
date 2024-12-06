@@ -37,7 +37,7 @@ export default function EducationSection() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6">Educación</h2>
+      {/* <h2 className="text-3xl font-bold mb-6">Educación</h2> */}
       {educationData.map((edu, index) => (
         <EducationCard
           key={index}
