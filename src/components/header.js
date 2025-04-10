@@ -9,12 +9,12 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navItems = [
-    { name: "Inicio", path: "/" },
-    { name: "Experiencia", path: "/experience" },
-    { name: "Educación", path: "/education" },
-    { name: "Habilidades", path: "/skills" },
-    { name: "Proyectos", path: "/projects" },
-  ]
+    { name: 'Inicio', path: '/' },
+    { name: 'Experiencia', path: '/experience' },
+    { name: 'Educación', path: '/education' },
+    { name: 'Habilidades', path: '/skills' },
+    { name: 'Proyectos', path: '/projects' },
+  ];
 
   return (
     <header className="bg-background border-b border-border fixed top-0 left-0 right-0 z-50">
