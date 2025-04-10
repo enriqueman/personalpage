@@ -1,8 +1,13 @@
+"use client"
+
+import { useLanguage } from "@/components/language-provider"
+
 export default function Footer() {
+  const { t } = useLanguage()
   return (
     <footer className="bg-background border-t border-border text-foreground p-4 mt-8">
       <div className="container mx-auto text-center">
-        <p>&copy; {new Date().getFullYear()} Cesar Enrique Manzano Velasco</p>
+        <p>&copy; {new Date().getFullYear()} Cesar Enrique Manzano Velasco - {t("footer.rights")}</p>
         <p className="mt-2">
           <a href="mailto:ceman217@gmail.com" className="text-primary hover:text-primary/80 transition-colors">
             ceman217@gmail.com

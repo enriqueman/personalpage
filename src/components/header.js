@@ -4,17 +4,20 @@ import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
+import { useLanguage } from "@/components/language-provider"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { t } = useLanguage()
 
   const navItems = [
-    { name: 'Inicio', path: '/' },
-    { name: 'Experiencia', path: '/experience' },
-    { name: 'Educación', path: '/education' },
-    { name: 'Habilidades', path: '/skills' },
-    { name: 'Proyectos', path: '/projects' },
-  ];
+    { name: t("nav.home"), path: "/" },
+    { name: t("nav.experience"), path: "/experience" },
+    { name: t("nav.education"), path: "/education" },
+    { name: t("nav.skills"), path: "/skills" },
+    { name: t("nav.projects"), path: "/projects" },
+  ]
 
   return (
     <header className="bg-background border-b border-border fixed top-0 left-0 right-0 z-50">
@@ -50,10 +53,11 @@ export default function Header() {
             ))}
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-4">
+            <LanguageToggle />
             <ThemeToggle />
             <Button asChild>
               <Link href="/contact" className="whitespace-nowrap">
-                Contacto
+                {t("nav.contact")}
               </Link>
             </Button>
           </div>
@@ -72,6 +76,7 @@ export default function Header() {
                   </Link>
                 </div>
                 <div className="-mr-2 flex items-center">
+                  <LanguageToggle />
                   <ThemeToggle />
                   <Button
                     variant="ghost"
@@ -101,7 +106,7 @@ export default function Header() {
             </div>
             <div className="py-6 px-5 space-y-6">
               <Button asChild className="w-full">
-                <Link href="/contact">Contacto</Link>
+                <Link href="/contact">{t("nav.contact")}</Link>
               </Button>
             </div>
           </div>
