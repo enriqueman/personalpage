@@ -1,26 +1,30 @@
-'use client'
-import Link from 'next/link';
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+"use client"
+import Link from "next/link"
+import { useState } from "react"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navItems = [
-    { name: 'Inicio', path: '/' },
-    { name: 'Experiencia', path: '/experience' },
-    { name: 'Educación', path: '/education' },
-    { name: 'Habilidades', path: '/skills' },
-    { name: 'Proyectos', path: '/projects' },
-  ];
+    { name: "Inicio", path: "/" },
+    { name: "Experiencia", path: "/experience" },
+    { name: "Educación", path: "/education" },
+    { name: "Habilidades", path: "/skills" },
+    { name: "Proyectos", path: "/projects" },
+  ]
 
   return (
-    <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
+    <header className="bg-background border-b border-border fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
-            <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300">
+            <Link
+              href="/"
+              className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-300"
+            >
               Enrique Manzano
             </Link>
           </div>
@@ -39,15 +43,16 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.path}
-                className="text-base font-medium text-gray-500 hover:text-gray-900 transition-colors duration-300"
+                className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors duration-300"
               >
                 {item.name}
               </Link>
             ))}
           </nav>
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-4">
+            <ThemeToggle />
             <Button asChild>
-              <Link href="/contact" className="ml-8 whitespace-nowrap">
+              <Link href="/contact" className="whitespace-nowrap">
                 Contacto
               </Link>
             </Button>
@@ -58,20 +63,22 @@ export default function Header() {
       {/* Mobile menu, show/hide based on menu state */}
       {isMenuOpen && (
         <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
-          <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
+          <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-background divide-y-2 divide-border">
             <div className="pt-5 pb-6 px-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <Link href="/" className="text-2xl font-bold text-gray-900">
+                  <Link href="/" className="text-2xl font-bold text-foreground">
                     Enrique Manzano
                   </Link>
                 </div>
-                <div className="-mr-2">
+                <div className="-mr-2 flex items-center">
+                  <ThemeToggle />
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsMenuOpen(false)}
                     aria-label="Cerrar menú"
+                    className="ml-2"
                   >
                     <X className="h-6 w-6" />
                   </Button>
@@ -83,12 +90,10 @@ export default function Header() {
                     <Link
                       key={item.name}
                       href={item.path}
-                      className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                      className="-m-3 p-3 flex items-center rounded-md hover:bg-secondary"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        {item.name}
-                      </span>
+                      <span className="ml-3 text-base font-medium text-foreground">{item.name}</span>
                     </Link>
                   ))}
                 </nav>
@@ -96,15 +101,12 @@ export default function Header() {
             </div>
             <div className="py-6 px-5 space-y-6">
               <Button asChild className="w-full">
-                <Link href="/contact">
-                  Contacto
-                </Link>
+                <Link href="/contact">Contacto</Link>
               </Button>
             </div>
           </div>
         </div>
       )}
     </header>
-  );
+  )
 }
-
