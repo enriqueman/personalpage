@@ -1,10 +1,15 @@
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Mail, Phone, MapPin, Linkedin, Github } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/components/language-provider"
 
 export default function Home() {
+  const { t } = useLanguage()
+
   const skills = [
     { name: "React", category: "frontend" },
     { name: "NodeJS", category: "backend" },
@@ -34,21 +39,14 @@ export default function Home() {
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-1/3  p-6 flex items-center justify-center">
               <Avatar className="h-48 w-48 border-4 border-background">
-                <AvatarImage src="/enriqueManzano.png" alt="Cesar Enrique Manzano Velasco" />
+                <AvatarImage src="/enriqueManzano.png" alt={t("home.title")} />
                 <AvatarFallback>CEM</AvatarFallback>
               </Avatar>
             </div>
             <div className="w-full md:w-2/3 p-6">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">Cesar Enrique Manzano Velasco</h1>
-              <p className="text-xl text-muted-foreground mb-4">Ingeniero en electrónica y telecomunicaciones</p>
-              <p className="text-muted-foreground">
-                Apasionado por el desarrollo de soluciones innovadoras y atractivas. He llevado a cabo diversos
-                proyectos web y aplicaciones de inteligencia artificial, utilizando modelos de lenguaje de diferentes
-                proveedores como Bedrock, OpenAI y Claude, así como herramientas como LangChain y LangSmith. Cuento con
-                experiencia en arquitecturas en la nube, especialmente en entornos serverless y en el manejo de bases de
-                datos SQL y NoSQL. Además, poseo habilidades en herramientas CI/CD, utilizando AWS SAM, CDK y Terraform
-                para el despliegue de sitios web y modelos de machine learning.
-              </p>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">{t("home.title")}</h1>
+              <p className="text-xl text-muted-foreground mb-4">{t("home.profession")}</p>
+              <p className="text-muted-foreground">{t("home.bio")}</p>
             </div>
           </div>
         </CardContent>
@@ -59,13 +57,13 @@ export default function Home() {
         {/* Contact Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Contacto</CardTitle>
-            <CardDescription>Información de contacto profesional</CardDescription>
+            <CardTitle>{t("home.contact")}</CardTitle>
+            <CardDescription>{t("home.contact.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center">
               <Phone className="h-5 w-5 mr-2 text-muted-foreground" />
-              <span>3017335302</span>
+              <span>+573017335302</span>
             </div>
             <div className="flex items-center">
               <Mail className="h-5 w-5 mr-2 text-muted-foreground" />
@@ -105,8 +103,8 @@ export default function Home() {
         {/* Skills Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Habilidades</CardTitle>
-            <CardDescription>Tecnologías y herramientas</CardDescription>
+            <CardTitle>{t("home.skills")}</CardTitle>
+            <CardDescription>{t("home.skills.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
