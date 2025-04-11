@@ -244,7 +244,12 @@ const translations = {
     "theme.title": "Change theme",
     "theme.light": "Light",
     "theme.dark": "Dark",
-    "theme.system": "System"
+    "theme.system": "System",
+
+    // 404 Page
+    "404.title": "404 - Page Not Found",
+    "404.description": "Sorry, the page you are looking for does not exist.",
+    "404.button": "Back to Home",
   },
   pt: {
     // Header
@@ -468,7 +473,7 @@ const translations = {
     "theme.dark": "Scuro",
     "theme.system": "Sistema",
 
-     // 404 Page
+    // 404 Page
     "404.title": "404 - Page Not Found",
     "404.description": "Sorry, the page you are looking for does not exist.",
     "404.button": "Back to Home",
