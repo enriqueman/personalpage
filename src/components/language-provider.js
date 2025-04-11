@@ -6,6 +6,8 @@ import { createContext, useContext, useEffect, useState } from "react"
 const languages = {
   es: "Spanish",
   en: "English",
+  // pt: "Portuguese",
+  // it: "Italian",
 }
 
 // Crear el contexto
@@ -126,7 +128,12 @@ const translations = {
     "theme.title": "Cambiar tema",
     "theme.light": "Claro",
     "theme.dark": "Oscuro",
-    "theme.system": "Sistema"
+    "theme.system": "Sistema",
+
+    // 404 Page
+    "404.title": "404 - Página no encontrada",
+    "404.description": "Lo sentimos, la página que buscas no existe.",
+    "404.button": "Volver al inicio",
   },
   en: {
     // Header
@@ -238,6 +245,233 @@ const translations = {
     "theme.light": "Light",
     "theme.dark": "Dark",
     "theme.system": "System"
+  },
+  pt: {
+    // Header
+    "nav.home": "Início",
+    "nav.experience": "Experiência",
+    "nav.education": "Educação",
+    "nav.skills": "Habilidades",
+    "nav.projects": "Projetos",
+    "nav.contact": "Contato",
+    "theme.light": "Claro",
+    "theme.dark": "Escuro",
+    "theme.system": "Sistema",
+
+    // Home page
+    "home.title": "Cesar Enrique Manzano Velasco",
+    "home.profession": "Engenheiro de Eletrônica e Telecomunicações",
+    "home.bio":
+      "Apaixonado por desenvolver soluções inovadoras e atraentes. Realizei diversos projetos web e aplicações de inteligência artificial, utilizando modelos de linguagem de diferentes provedores como Bedrock, OpenAI e Claude, além de ferramentas como LangChain e LangSmith. Tenho experiência em arquiteturas em nuvem, especialmente em ambientes serverless e no gerenciamento de bancos de dados SQL e NoSQL. Além disso, possuo habilidades em ferramentas CI/CD, utilizando AWS SAM, CDK e Terraform para implantação de sites e modelos de machine learning.",
+    "home.contact": "Contato",
+    "home.contact.description": "Informações de contato profissional",
+    "home.phone": "Telefone",
+    "home.email": "E-mail",
+    "home.location": "Localização",
+    "home.skills": "Habilidades",
+    "home.skills.description": "Tecnologias e ferramentas",
+
+    // Education
+    "education.title": "Educação",
+    "education.degree1": "Estudante de Mestrado em Inteligência Artificial Aplicada",
+    "education.institution1": "Universidade Icesi",
+    "education.period1": "Julho de 2024 – Dezembro de 2025",
+    "education.description1": "Aprofundamento em técnicas avançadas de IA e sua aplicação prática em diversos campos.",
+
+    "education.degree2": "Engenharia Eletrônica e de Telecomunicações",
+    "education.institution2": "Universidade del Cauca",
+    "education.period2": "Abril de 2024",
+    "education.description2": "Formação integral em eletrônica e sistemas de telecomunicações.",
+
+    "education.degree3": "AWS CLOUD Practitioner",
+    "education.institution3": "Amazon Web Services AWS",
+    "education.period3": "Novembro de 2023",
+    "education.description3": "Certificação em fundamentos de serviços em nuvem da AWS.",
+
+    "education.degree4": "Misión TIC 2022",
+    "education.institution4": "Universidade Tecnológica de Pereira",
+    "education.period4": "Abril de 2022",
+    "education.description4": "Programa intensivo de formação em desenvolvimento de software e habilidades digitais.",
+
+    "education.degree5": "Ciência de Dados",
+    "education.institution5": "CoderHause",
+    "education.period5": "Maio de 2022",
+    "education.description5": "Curso especializado em ciência de dados e análise estatística.",
+
+    // Experience
+    "experience.title": "Experiência Profissional",
+    "experience.academic.title": "Experiência Acadêmica",
+
+    "experience.job1.title": "Desenvolvedor da equipe Ayte",
+    "experience.job1.company": "Ayte",
+    "experience.job1.period": "Setembro de 2023 - Atual",
+    "experience.job1.description":
+      "Desenvolvedor de projetos web usando tecnologias como NodeJS e React; membro da equipe de inovação para desenvolvimento de agentes com Inteligência Artificial generativa, implementados em canais como Google Chat, Microsoft Teams e Slack, utilizando tecnologias como RAG e serverless",
+
+    "experience.academic1.title": "Sistema de notificação para fake news no contexto político colombiano",
+    "experience.academic1.company": "Universidade del Cauca",
+    "experience.academic1.period": "Janeiro de 2023 - Agosto de 2023",
+    "experience.academic1.description":
+      "Projeto de trabalho de conclusão de curso que consistiu na criação de um sistema de identificação e notificação de fake news, utilizando diversas APIs para o reconhecimento e divulgação de conteúdo verificado na rede. A interface foi desenvolvida em Angular para sites e Kotlin para um aplicativo.<br/> • O projeto teve diferentes etapas, incluindo coleta de notícias de diversas fontes como Twitter (atual X) e Colombia Check, utilizando a API do Twitter e técnicas de web scraping. Foi realizado o processo de fine-tuning em um modelo FastAPI para verificar a veracidade das notícias.<br/> • Foi implementado um aplicativo para visualizar as notícias verificadas utilizando Kotlin, com Firebase como banco de dados.",
+
+    "experience.academic2.title": "Sistema veterinário para Pets",
+    "experience.academic2.company": "Misión TIC 2022",
+    "experience.academic2.period": "Abril de 2022 - Dezembro de 2022",
+    "experience.academic2.description":
+      "Projeto de validação do Curso Misión TIC, consistindo na criação de um sistema de gestão de pets para uma clínica veterinária, para gerenciar consultas, clientes e animais. O sistema foi desenvolvido em Node.js e Angular.",
+
+    // Projects
+    "projects.title": "Projetos Pessoais",
+
+    "projects.project1.title": "Criação e implantação do site para Empreendimento Ghaiasolution.com",
+    "projects.project1.type": "Website",
+    "projects.project1.period": "www.ghaiasolutions.com",
+    "projects.project1.description":
+      "Desenvolvimento e implantação da arquitetura e estrutura de implementação para um site de empreendimento, construído em Next.js e hospedado na AWS, utilizando S3, CloudFront e Route 53. Implementação de um sistema de notificação de mensagens via SES para armazenar informações de contato de interessados",
+
+    "projects.project2.title": "Criação e implantação de Portfólio Pessoal",
+    "projects.project2.type": "Website",
+    "projects.project2.period": "www.enriquemv.com",
+    "projects.project2.description":
+      "Site para apresentação do meu portfólio pessoal, construído em Next.js, hospedado no S3 e implantado no CloudFront e Route 53. Implementa três tipos de ambientes: desenvolvimento, testes e produção, utilizando GitHub Actions e AWS Serverless Application Model para implantação",
+
+    "projects.project3.title": "Implantação de Modelos de Machine Learning Usando Fargate",
+    "projects.project3.type": "Implantação de Modelos",
+    "projects.project3.period": "www.ataraxiapro.com",
+    "projects.project3.description":
+      "Implantação de modelos de machine learning utilizando Docker, AWS ECS, balanceador de carga e API Gateway. A infraestrutura foi implementada com AWS CDK, e o modelo foi implantado usando FastAPI com Docker. O frontend, onde são feitas as requisições, foi implementado na minha página de testes e blog pessoal.",
+
+    // Skills
+    "skills.title": "Habilidades",
+    "skills.category1": "Desenvolvimento Web",
+    "skills.category2": "Cloud e Bancos de Dados",
+    "skills.category3": "Inteligência Artificial",
+    "skills.category4": "Outras Tecnologias",
+
+    // Footer
+    "footer.rights": "Todos os direitos reservados",
+
+    // Theme
+    "theme.title": "Mudar tema",
+    "theme.light": "Claro",
+    "theme.dark": "Escuro",
+    "theme.system": "Sistema"
+  },
+  it: {
+    // Header
+    "nav.home": "Home",
+    "nav.experience": "Esperienza",
+    "nav.education": "Formazione",
+    "nav.skills": "Competenze",
+    "nav.projects": "Progetti",
+    "nav.contact": "Contatto",
+    "theme.light": "Chiaro",
+    "theme.dark": "Scuro",
+    "theme.system": "Sistema",
+
+    // Home page
+    "home.title": "Cesar Enrique Manzano Velasco",
+    "home.profession": "Ingegnere Elettronico e delle Telecomunicazioni",
+    "home.bio":
+      "Appassionato nello sviluppo di soluzioni innovative e attraenti. Ho realizzato vari progetti web e applicazioni di intelligenza artificiale, utilizzando modelli linguistici di diversi provider come Bedrock, OpenAI e Claude, oltre a strumenti come LangChain e LangSmith. Ho esperienza in architetture cloud, specialmente in ambienti serverless e nella gestione di database SQL e NoSQL. Inoltre, possiedo competenze in strumenti CI/CD, utilizzando AWS SAM, CDK e Terraform per il deployment di siti web e modelli di machine learning.",
+    "home.contact": "Contatto",
+    "home.contact.description": "Informazioni di contatto professionali",
+    "home.phone": "Telefono",
+    "home.email": "Email",
+    "home.location": "Ubicazione",
+    "home.skills": "Competenze",
+    "home.skills.description": "Tecnologie e strumenti",
+
+    // Education
+    "education.title": "Formazione",
+    "education.degree1": "Studente Magistrale in Intelligenza Artificiale Applicata",
+    "education.institution1": "Universidad Icesi",
+    "education.period1": "Luglio 2024 – Dicembre 2025",
+    "education.description1": "Approfondimento di tecniche avanzate di IA e loro applicazione pratica in diversi campi.",
+
+    "education.degree2": "Ingegneria Elettronica e delle Telecomunicazioni",
+    "education.institution2": "Universidad del Cauca",
+    "education.period2": "Aprile 2024",
+    "education.description2": "Formazione completa in elettronica e sistemi di telecomunicazione.",
+
+    "education.degree3": "AWS CLOUD Practitioner",
+    "education.institution3": "Amazon Web Services AWS",
+    "education.period3": "Novembre 2023",
+    "education.description3": "Certificazione sui fondamenti dei servizi cloud AWS.",
+
+    "education.degree4": "Misión TIC 2022",
+    "education.institution4": "Universidad Tecnológica de Pereira",
+    "education.period4": "Aprile 2022",
+    "education.description4": "Programma intensivo di formazione in sviluppo software e competenze digitali.",
+
+    "education.degree5": "Data Science",
+    "education.institution5": "CoderHause",
+    "education.period5": "Maggio 2022",
+    "education.description5": "Corso specializzato in data science e analisi statistica.",
+
+    // Experience
+    "experience.title": "Esperienza Lavorativa",
+    "experience.academic.title": "Esperienza Accademica",
+
+    "experience.job1.title": "Sviluppatore nel Team Ayte",
+    "experience.job1.company": "Ayte",
+    "experience.job1.period": "Settembre 2023 - Attuale",
+    "experience.job1.description":
+      "Sviluppatore di progetti web utilizzando tecnologie come NodeJS e React; membro del team innovazione per lo sviluppo di agenti con Intelligenza Artificiale generativa, implementati in canali come Google Chat, Microsoft Teams e Slack, utilizzando tecnologie come RAG e serverless",
+
+    "experience.academic1.title": "Sistema di notifica per fake news nel contesto politico colombiano",
+    "experience.academic1.company": "Universidad del Cauca",
+    "experience.academic1.period": "Gennaio 2023 - Agosto 2023",
+    "experience.academic1.description":
+      "Progetto di tesi che consisteva nella creazione di un sistema di identificazione e notifica di fake news, utilizzando varie API per il riconoscimento e la diffusione di contenuti verificati in rete. L'interfaccia è stata sviluppata in Angular per siti web e Kotlin per un'app.<br/> • Il progetto ha avuto diverse fasi, inclusa la raccolta di notizie da varie fonti come Twitter (ora X) e Colombia Check, utilizzando l'API di Twitter e tecniche di web scraping. È stato effettuato un processo di fine-tuning su un modello FastAPI per verificare la veridicità delle notizie.<br/> • È stata implementata un'applicazione per visualizzare le notizie verificate utilizzando Kotlin, con Firebase come database.",
+
+    "experience.academic2.title": "Sistema veterinario per animali domestici",
+    "experience.academic2.company": "Misión TIC 2022",
+    "experience.academic2.period": "Aprile 2022 - Dicembre 2022",
+    "experience.academic2.description":
+      "Progetto di validazione del Corso Misión TIC, consistente nella creazione di un sistema di gestione per animali domestici in una clinica veterinaria, per gestire appuntamenti, clienti e animali. Il sistema è stato sviluppato in Node.js e Angular.",
+
+    // Projects
+    "projects.title": "Progetti Personali",
+
+    "projects.project1.title": "Creazione e deployment del sito web per l'impresa Ghaiasolution.com",
+    "projects.project1.type": "Sito web",
+    "projects.project1.period": "www.ghaiasolutions.com",
+    "projects.project1.description":
+      "Sviluppo e deployment dell'architettura e struttura di implementazione per un sito web aziendale, costruito in Next.js e ospitato su AWS, utilizzando S3, CloudFront e Route 53. Implementazione di un sistema di notifica messaggi tramite SES per memorizzare le informazioni di contatto degli interessati",
+
+    "projects.project2.title": "Creazione e Deployment di Portfolio Personale",
+    "projects.project2.type": "Sito web",
+    "projects.project2.period": "www.enriquemv.com",
+    "projects.project2.description":
+      "Sito web per la presentazione del mio portfolio personale, costruito in Next.js, ospitato su S3 e deployato su CloudFront e Route 53. Implementa tre tipi di ambienti: sviluppo, testing e produzione, utilizzando GitHub Actions e AWS Serverless Application Model per il deployment",
+
+    "projects.project3.title": "Deployment di Modelli Machine Learning Usando Fargate",
+    "projects.project3.type": "Deployment Modelli",
+    "projects.project3.period": "www.ataraxiapro.com",
+    "projects.project3.description":
+      "Deployment di modelli machine learning utilizzando Docker, AWS ECS, un bilanciatore di carico e API Gateway. L'infrastruttura è stata implementata con AWS CDK, e il modello è stato deployato usando FastAPI con Docker. Il frontend, dove vengono effettuate le richieste, è stato implementato sulla mia pagina di test e blog personale.",
+
+    // Skills
+    "skills.title": "Competenze",
+    "skills.category1": "Sviluppo Web",
+    "skills.category2": "Cloud e Database",
+    "skills.category3": "Intelligenza Artificiale",
+    "skills.category4": "Altre Tecnologie",
+
+    // Footer
+    "footer.rights": "Tutti i diritti riservati",
+
+    // Theme
+    "theme.title": "Cambia tema",
+    "theme.light": "Chiaro",
+    "theme.dark": "Scuro",
+    "theme.system": "Sistema",
+
+     // 404 Page
+    "404.title": "404 - Page Not Found",
+    "404.description": "Sorry, the page you are looking for does not exist.",
+    "404.button": "Back to Home",
   },
 }
 

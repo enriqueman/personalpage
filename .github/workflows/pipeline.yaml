@@ -257,7 +257,7 @@ jobs:
             aws-region: 'us-east-1'
             origin-prefix: 'root'
             include-origin-prefix: true
-            invalidate-paths: '/index.html,/error.html,/'
+            invalidate-paths: '/index.html,/error.html,/404.html,/'
             default-root-object: 'index.html'
 
 
@@ -416,5 +416,5 @@ jobs:
           aws-region: 'us-east-1'
           origin-prefix: 'root'
           include-origin-prefix: true
-          invalidate-paths: '/index.html,/error.html,/'
+          invalidate-paths: '/index.html,/error.html,/404.html,/'
           default-root-object: 'index.html'

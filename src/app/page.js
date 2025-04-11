@@ -32,7 +32,7 @@ export default function Home() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
+    <div className="container mx-auto mt-20 px-4 py-8 max-w-5xl">
       {/* Hero Section */}
       <Card className="mb-8 overflow-hidden">
         <CardContent className="p-0">
@@ -63,7 +63,7 @@ export default function Home() {
           <CardContent className="space-y-4">
             <div className="flex items-center">
               <Phone className="h-5 w-5 mr-2 text-muted-foreground" />
-              <span>3017335302</span>
+              <span>+573017335302</span>
             </div>
             <div className="flex items-center">
               <Mail className="h-5 w-5 mr-2 text-muted-foreground" />
