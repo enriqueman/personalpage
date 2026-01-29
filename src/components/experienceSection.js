@@ -32,7 +32,6 @@ export default function ExperienceSection() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mt-20 mb-6">{t("experience.title")}</h1>
 
       {workExperience.map((exp, index) => (
         <ExperienceCard
