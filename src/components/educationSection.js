@@ -3,6 +3,8 @@
 import EducationCard from "./educationCard"
 import { useLanguage } from "@/components/language-provider"
 
+const cardHover = "card-interactive hover:-translate-y-0.5"
+
 export default function EducationSection() {
   const { t } = useLanguage()
 
@@ -12,6 +14,7 @@ export default function EducationSection() {
       institution: t("education.institution1"),
       period: t("education.period1"),
       description: t("education.description1"),
+      note: t("education.degree1.note"),
     },
     {
       degree: t("education.degree2"),
@@ -40,7 +43,7 @@ export default function EducationSection() {
   ]
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="space-y-5">
       {educationData.map((edu, index) => (
         <EducationCard
           key={index}
@@ -48,6 +51,9 @@ export default function EducationSection() {
           institution={edu.institution}
           period={edu.period}
           description={edu.description}
+          note={edu.note}
+          className={`animate-stagger-item ${cardHover}`}
+          style={{ transitionDelay: `${index * 100}ms` }}
         />
       ))}
     </div>

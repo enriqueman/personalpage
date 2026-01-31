@@ -1,19 +1,35 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 
-export default function SkillCard({ category, skills }) {
+// skills: array of { label: string, level?: string }
+export default function SkillCard({ category, skills, className = "", style }) {
   return (
-    <Card className="shadow-md rounded-lg p-6 mb-4 transition-all duration-300 hover:shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold mb-2">{category}</CardTitle>
+    <Card
+      className={`card-accent flex flex-col border-l-4 border-transparent border-border shadow-sm transition-all duration-300 hover:border-primary hover:shadow-lg hover:-translate-y-0.5 ${className}`}
+      style={style}
+    >
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-semibold">{category}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-wrap gap-2">
+        <ul className="space-y-1.5 text-sm text-foreground/90">
           {skills.map((skill, index) => (
-            <span key={index} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm">
-              {skill}
-            </span>
+            <li key={index} className="flex items-baseline gap-2">
+              <span className="text-muted-foreground select-none">•</span>
+              <span>
+                {typeof skill === "string" ? (
+                  skill
+                ) : (
+                  <>
+                    {skill.label}
+                    {skill.level && (
+                      <span className="ml-1.5 text-xs text-muted-foreground">({skill.level})</span>
+                    )}
+                  </>
+                )}
+              </span>
+            </li>
           ))}
-        </div>
+        </ul>
       </CardContent>
     </Card>
   )
