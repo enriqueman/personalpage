@@ -3,51 +3,191 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
+  /* Paleta armónica: tonos cálidos, mismo lenguaje de color, sin grises fríos */
+  --background: 38 22% 97%;
+  --foreground: 32 18% 28%;
+  --card: 40 20% 99%;
+  --card-foreground: 32 18% 28%;
+  --popover: 40 20% 99%;
+  --popover-foreground: 32 18% 28%;
+  --primary: 199 45% 42%;
+  --primary-foreground: 38 22% 98%;
+  --secondary: 38 18% 94%;
+  --secondary-foreground: 32 18% 32%;
+  --muted: 38 18% 94%;
+  --muted-foreground: 32 14% 48%;
+  --accent: 38 18% 94%;
+  --accent-foreground: 32 18% 32%;
+  --destructive: 0 55% 52%;
+  --destructive-foreground: 38 22% 98%;
+  --border: 35 16% 90%;
+  --input: 35 16% 90%;
+  --ring: 199 45% 42%;
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 224.3 76.3% 48%;
+  --background: 32 15% 14%;
+  --foreground: 38 12% 90%;
+  --card: 32 14% 18%;
+  --card-foreground: 38 12% 90%;
+  --popover: 32 14% 18%;
+  --popover-foreground: 38 12% 90%;
+  --primary: 199 50% 55%;
+  --primary-foreground: 32 15% 14%;
+  --secondary: 32 14% 22%;
+  --secondary-foreground: 38 12% 90%;
+  --muted: 32 14% 22%;
+  --muted-foreground: 38 10% 58%;
+  --accent: 32 14% 22%;
+  --accent-foreground: 38 12% 90%;
+  --destructive: 0 45% 45%;
+  --destructive-foreground: 38 12% 90%;
+  --border: 32 12% 26%;
+  --input: 32 12% 26%;
+  --ring: 199 50% 55%;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   color: hsl(var(--foreground));
   background: hsl(var(--background));
+}
+
+/* Animaciones al entrar en viewport: opacidad 0 hasta que .animate-in-view.visible */
+.animate-in-view {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: none;
+}
+.animate-in-view.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Stagger para hijos */
+.animate-stagger-children .animate-stagger-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.animate-stagger-children.visible .animate-stagger-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Barras de progreso: el fill se anima con CSS cuando .progress-visible */
+.skill-progress-bar {
+  overflow: hidden;
+  border-radius: 9999px;
+  background: hsl(var(--muted));
+}
+.skill-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, hsl(var(--primary) / 0.9), hsl(var(--primary)));
+  width: 0;
+  transition: width 1s ease-out;
+}
+.skill-progress-bar.progress-visible .skill-progress-fill {
+  width: var(--progress-width, 80%);
+}
+
+/* Interactividad: enlaces con subrayado animado */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1.5px;
+  background: hsl(var(--primary));
+  transition: width 0.25s ease;
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after,
+.link-underline.nav-link-active::after {
+  width: 100%;
+}
+
+/* Botones con feedback táctil */
+.btn-interactive {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.18);
+}
+.btn-interactive:active {
+  transform: translateY(0);
+}
+
+/* Cards interactivas: borde sutil al hover */
+.card-interactive {
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+.card-interactive:hover {
+  border-color: hsl(var(--border));
+  box-shadow: 0 8px 24px -8px hsl(var(--foreground) / 0.08);
+}
+.card-interactive:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.5);
+}
+
+/* Hero: fondo con gradiente sutil y forma decorativa */
+.hero-bg {
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 80%;
+  max-width: 600px;
+  height: 140%;
+  background: radial-gradient(ellipse, hsl(var(--primary) / 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.dark .hero-bg::before {
+  background: radial-gradient(ellipse, hsl(var(--primary) / 0.08) 0%, transparent 70%);
+}
+
+/* Sección con borde de acento (título) - acento suave */
+.section-accent {
+  position: relative;
+  padding-left: 1rem;
+  border-left: 3px solid hsl(var(--primary) / 0.7);
+}
+
+/* Card con línea de acento al hover */
+.card-accent:hover {
+  border-left-color: hsl(var(--primary));
+}
+
+/* Stats: misma paleta que el resto, sin bloque oscuro */
+.stats-strip {
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
+}
+.dark .stats-strip {
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
+}
+
+/* CTA / Contacto: mismo tono que secondary */
+.contact-cta-bg {
+  background: hsl(var(--secondary));
+}
+.dark .contact-cta-bg {
+  background: hsl(var(--secondary));
 }
