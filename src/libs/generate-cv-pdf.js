@@ -19,6 +19,10 @@ const RIGHT_COL_WIDTH = CONTENT_WIDTH * 0.4 // 40% del contenido
 const LEFT_COL_X = MARGIN_LEFT
 const RIGHT_COL_X = MARGIN_LEFT + LEFT_COL_WIDTH + COL_GAP
 
+// Márgenes contenido columna derecha: 0,5 cm títulos, 1 cm ítems
+const RIGHT_COL_PADDING_TITLE = 5  // 0,5 cm
+const RIGHT_COL_PADDING_ITEM = 10  // 1 cm
+
 // Colores (RGB 0-255): #2C3E50, #0066CC, #555555, #777777, #CCCCCC, #E8F4F8
 const COLORS = {
   dark: [44, 62, 80],       // texto principal
@@ -240,6 +244,10 @@ function drawRightColumn(doc, data, imageBase64) {
 
   const x = RIGHT_COL_X
   const w = RIGHT_COL_WIDTH
+  const xTitle = RIGHT_COL_X + RIGHT_COL_PADDING_TITLE
+  const wTitle = RIGHT_COL_WIDTH - RIGHT_COL_PADDING_TITLE
+  const xItem = RIGHT_COL_X + RIGHT_COL_PADDING_ITEM
+  const wItem = RIGHT_COL_WIDTH - RIGHT_COL_PADDING_ITEM
   let y = MARGIN_TOP
 
   // Foto 80x80, sin borde ni fondo
@@ -254,33 +262,33 @@ function drawRightColumn(doc, data, imageBase64) {
   const betweenLines = 4
 
   // CONTACT
-  y = addRightSectionTitle(doc, data.contactTitle, x, y, w)
+  y = addRightSectionTitle(doc, data.contactTitle, xTitle, y, wTitle)
   setColor(doc, COLORS.dark)
   doc.setFontSize(BODY_SMALL)
   doc.setFont(FONT, "normal")
-  y = addText(doc, data.phone, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
+  y = addText(doc, data.phone, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
   y += betweenLines / 2
-  y = addText(doc, data.location, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
+  y = addText(doc, data.location, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
   y += betweenLines / 2
-  y = addText(doc, data.email, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
+  y = addText(doc, data.email, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
   y += betweenLines
   setColor(doc, COLORS.blue)
-  y = addText(doc, `${data.web} · LinkedIn: ${data.linkedin} · GitHub: ${data.github}`, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
+  y = addText(doc, `${data.web} · LinkedIn: ${data.linkedin} · GitHub: ${data.github}`, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
   y += 12
   setColor(doc, COLORS.dark)
 
   // LANGUAGES
   if (data.languagesTitle) {
-    y = addRightSectionTitle(doc, data.languagesTitle, x, y, w)
-    y = addText(doc, data.languages, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
+    y = addRightSectionTitle(doc, data.languagesTitle, xTitle, y, wTitle)
+    y = addText(doc, data.languages, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
     y += 12
   }
 
   // SKILLS (SOFT SKILLS se dibuja en la columna derecha de la página 2 para que no se corte)
-  y = addRightSectionTitle(doc, data.skillsTitle, x, y, w)
+  y = addRightSectionTitle(doc, data.skillsTitle, xTitle, y, wTitle)
   const skillsLines = data.skills.split(",").map((s) => s.trim())
   for (const skill of skillsLines) {
-    y = addText(doc, skill, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: 1.2 })
+    y = addText(doc, skill, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: 1.2 })
     y += 2
   }
 }
@@ -290,21 +298,22 @@ function drawRightColumn(doc, data, imageBase64) {
  * Devuelve la Y final para que debajo se dibuje PERSONAL REFERENCES.
  */
 function drawSoftSkillsInRightColumn(doc, data) {
-  const x = RIGHT_COL_X
-  const w = RIGHT_COL_WIDTH
+  const xTitle = RIGHT_COL_X + RIGHT_COL_PADDING_TITLE
+  const wTitle = RIGHT_COL_WIDTH - RIGHT_COL_PADDING_TITLE
+  const xItem = RIGHT_COL_X + RIGHT_COL_PADDING_ITEM
+  const wItem = RIGHT_COL_WIDTH - RIGHT_COL_PADDING_ITEM
   let y = MARGIN_TOP
   if (!data.softSkillsTitle) return y
-  y = addRightSectionTitle(doc, data.softSkillsTitle, x, y, w)
+  y = addRightSectionTitle(doc, data.softSkillsTitle, xTitle, y, wTitle)
   setColor(doc, COLORS.dark)
   doc.setFontSize(BODY_SMALL)
   doc.setFont(FONT, "normal")
-  // Cada habilidad en una fila, sin espacio entre ellas (separar por ". ")
   const skills = (typeof data.softSkills === "string"
     ? data.softSkills.split(". ").map((s) => s.trim()).filter(Boolean)
     : data.softSkills)
   const tightLine = { fontSize: BODY_SMALL, lineHeightRatio: 1 }
   for (const skill of skills) {
-    y = addText(doc, skill, x, y, w, tightLine)
+    y = addText(doc, skill, xItem, y, wItem, tightLine)
     y += 2
   }
   return y
@@ -316,20 +325,22 @@ function drawSoftSkillsInRightColumn(doc, data) {
  */
 function drawPersonalReferencesInRightColumn(doc, data, startY) {
   if (!data.referencesTitle || !data.ref1) return
-  const x = RIGHT_COL_X
-  const w = RIGHT_COL_WIDTH
+  const xTitle = RIGHT_COL_X + RIGHT_COL_PADDING_TITLE
+  const wTitle = RIGHT_COL_WIDTH - RIGHT_COL_PADDING_TITLE
+  const xItem = RIGHT_COL_X + RIGHT_COL_PADDING_ITEM
+  const wItem = RIGHT_COL_WIDTH - RIGHT_COL_PADDING_ITEM
   let y = startY + 12
-  y = addRightSectionTitle(doc, data.referencesTitle, x, y, w)
+  y = addRightSectionTitle(doc, data.referencesTitle, xTitle, y, wTitle)
   const refs = [data.ref1, data.ref2, data.ref3].filter(Boolean)
   for (const ref of refs) {
     y += 2
-    y = addTextBold(doc, ref.name, x, y, w, { fontSize: BODY_SIZE })
+    y = addTextBold(doc, ref.name, xItem, y, wItem, { fontSize: BODY_SIZE })
     y += 1
     setColor(doc, COLORS.mediumGray)
-    y = addText(doc, ref.title, x, y, w, { fontSize: BODY_SMALL })
+    y = addText(doc, ref.title, xItem, y, wItem, { fontSize: BODY_SMALL })
     y += 1
     setColor(doc, COLORS.dark)
-    y = addText(doc, ref.phone, x, y, w, { fontSize: BODY_SMALL })
+    y = addText(doc, ref.phone, xItem, y, wItem, { fontSize: BODY_SMALL })
     y += 2
   }
 }
