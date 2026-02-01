@@ -59,8 +59,32 @@ function drawSeparatorLine(doc, x, y, widthMm, lineWidthPt = 1) {
 }
 
 /**
- * Añade texto con wrap; devuelve nueva Y. Opciones: fontSize, color, lineHeightRatio, autoPageBreak.
- * Si autoPageBreak, al añadir página se dibuja solo el fondo de la columna derecha (sin repetir contenido).
+ * Dibuja una línea justificada: reparte el espacio extra entre palabras para llenar maxWidth.
+ * Usa la fuente/tamaño actual del doc (debe estar ya configurado en addText).
+ */
+function drawJustifiedLine(doc, line, x, y, maxWidth) {
+  const words = line.trim().split(/\s+/).filter(Boolean)
+  if (words.length <= 1) {
+    doc.text(line.trim(), x, y)
+    return
+  }
+  const spaceWidth = doc.getTextWidth(" ")
+  let totalWordsWidth = 0
+  for (const w of words) totalWordsWidth += doc.getTextWidth(w)
+  const totalSpaceWidth = spaceWidth * (words.length - 1)
+  const gap = maxWidth - totalWordsWidth - totalSpaceWidth
+  const extraSpace = gap > 0 ? gap / (words.length - 1) : 0
+  let currentX = x
+  for (let j = 0; j < words.length; j++) {
+    doc.text(words[j], currentX, y)
+    currentX += doc.getTextWidth(words[j])
+    if (j < words.length - 1) currentX += spaceWidth + extraSpace
+  }
+}
+
+/**
+ * Añade texto con wrap; devuelve nueva Y. Opciones: fontSize, color, lineHeightRatio, autoPageBreak, fontStyle, align.
+ * align: 'left' | 'justify' — para párrafos usar align: 'justify' (justificación manual, ya que jsPDF no justifica bien con maxWidth).
  */
 function addText(doc, text, x, y, maxWidth, options = {}) {
   const {
@@ -68,15 +92,18 @@ function addText(doc, text, x, y, maxWidth, options = {}) {
     color = COLORS.dark,
     lineHeightRatio = 1.3,
     autoPageBreak = false,
+    fontStyle = "normal",
+    align = "left",
   } = options
   doc.setFontSize(fontSize)
-  doc.setFont(FONT, "normal")
+  doc.setFont(FONT, fontStyle)
   setColor(doc, color)
   const lines = doc.splitTextToSize(text, maxWidth)
   const lineHeightMm = (fontSize * 0.35) * lineHeightRatio // aprox mm por línea
   const state = options.state
   const dataForSoftSkills = options.dataForSoftSkills
-  for (const line of lines) {
+  const doJustify = align === "justify"
+  for (let i = 0; i < lines.length; i++) {
     if (autoPageBreak && y + lineHeightMm > PAGE_HEIGHT - MARGIN_BOTTOM) {
       doc.addPage()
       const drawSoftSkills = state && !state.softSkillsDrawnInRightColumn
@@ -84,30 +111,29 @@ function addText(doc, text, x, y, maxWidth, options = {}) {
       if (state) state.softSkillsDrawnInRightColumn = true
       y = MARGIN_TOP
     }
-    doc.text(line, x, y)
+    if (doJustify && lines[i].trim().length > 0) {
+      drawJustifiedLine(doc, lines[i], x, y, maxWidth)
+    } else {
+      doc.text(lines[i], x, y, { maxWidth, align: "left" })
+    }
     y += lineHeightMm
   }
+  doc.setFont(FONT, "normal")
   return y
 }
 
 /**
- * Añade texto en negrita.
+ * Añade texto en negrita (usa fontStyle: "bold" en addText para que no se sobrescriba).
  */
 function addTextBold(doc, text, x, y, maxWidth, options = {}) {
-  doc.setFont(FONT, "bold")
-  const result = addText(doc, text, x, y, maxWidth, options)
-  doc.setFont(FONT, "normal")
-  return result
+  return addText(doc, text, x, y, maxWidth, { ...options, fontStyle: "bold" })
 }
 
 /**
  * Añade texto en cursiva (periodos/fechas).
  */
 function addTextItalic(doc, text, x, y, maxWidth, options = {}) {
-  doc.setFont(FONT, "italic")
-  const result = addText(doc, text, x, y, maxWidth, { ...options, fontSize: options.fontSize || PERIOD_SIZE })
-  doc.setFont(FONT, "normal")
-  return result
+  return addText(doc, text, x, y, maxWidth, { ...options, fontSize: options.fontSize || PERIOD_SIZE, fontStyle: "italic" })
 }
 
 /**
@@ -256,7 +282,7 @@ function drawRightColumn(doc, data, imageBase64) {
   const skillsLines = data.skills.split(",").map((s) => s.trim())
   for (const skill of skillsLines) {
     y = addText(doc, skill, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: 1.2 })
-    y += 3
+    y += 2
   }
 }
 
@@ -273,7 +299,15 @@ function drawSoftSkillsInRightColumn(doc, data) {
   setColor(doc, COLORS.dark)
   doc.setFontSize(BODY_SMALL)
   doc.setFont(FONT, "normal")
-  y = addText(doc, data.softSkills, x, y, w, { fontSize: BODY_SMALL, lineHeightRatio: 1.2 })
+  // Cada habilidad en una fila, sin espacio entre ellas (separar por ". ")
+  const skills = (typeof data.softSkills === "string"
+    ? data.softSkills.split(". ").map((s) => s.trim()).filter(Boolean)
+    : data.softSkills)
+  const tightLine = { fontSize: BODY_SMALL, lineHeightRatio: 1 }
+  for (const skill of skills) {
+    y = addText(doc, skill, x, y, w, tightLine)
+    y += 2
+  }
   return y
 }
 
@@ -289,15 +323,15 @@ function drawPersonalReferencesInRightColumn(doc, data, startY) {
   y = addRightSectionTitle(doc, data.referencesTitle, x, y, w)
   const refs = [data.ref1, data.ref2, data.ref3].filter(Boolean)
   for (const ref of refs) {
-    y += 6
-    y = addTextBold(doc, ref.name, x, y, w, { fontSize: BODY_SIZE })
     y += 2
+    y = addTextBold(doc, ref.name, x, y, w, { fontSize: BODY_SIZE })
+    y += 1
     setColor(doc, COLORS.mediumGray)
     y = addText(doc, ref.title, x, y, w, { fontSize: BODY_SMALL })
     y += 1
     setColor(doc, COLORS.dark)
     y = addText(doc, ref.phone, x, y, w, { fontSize: BODY_SMALL })
-    y += 6
+    y += 2
   }
 }
 
@@ -335,29 +369,26 @@ function buildPdf(lang, imageBase64) {
   let maxWidth = LEFT_COL_WIDTH
 
   // 1. Nombre: 28 pt Bold #2C3E50, espaciado inferior 3 mm
-  doc.setFontSize(NAME_SIZE)
-  doc.setFont(FONT, "bold")
   setColor(doc, COLORS.dark)
-  y = addText(doc, data.name, x, y, maxWidth, { fontSize: NAME_SIZE, lineHeightRatio: 1 })
-  y += 3
+  y = addTextBold(doc, data.name, x, y, maxWidth, { fontSize: NAME_SIZE, lineHeightRatio: 1 })
+  y += 1
 
-  // Subtítulo: 11 pt Regular #555555, espaciado inferior 12 mm
-  doc.setFont(FONT, "normal")
+  // Subtítulo: 11 pt Bold #555555 (negrita como subtítulo), espaciado inferior 12 mm
   setColor(doc, COLORS.mediumGray)
-  y = addText(doc, data.title, x, y, maxWidth, { fontSize: SUBTITLE_SIZE, lineHeightRatio: 1 })
-  y += 12
+  y = addTextBold(doc, data.title, x, y, maxWidth, { fontSize: SUBTITLE_SIZE, lineHeightRatio: 1 })
+  y += 3
   setColor(doc, COLORS.dark)
 
   // 2. Descripción del perfil: 10 pt, justificado (simulado con left), line height 1.4, espaciado inferior 15 mm
-  y = addText(doc, data.summary, x, y, maxWidth, { fontSize: BODY_SIZE, lineHeightRatio: 1.4 })
-  y += 15
+  y = addText(doc, data.summary, x, y, maxWidth, { fontSize: BODY_SIZE, lineHeightRatio: 1.4, align: "justify" })
+  y += 3
 
   // 3. WORK EXPERIENCE
   y = addLeftSectionTitle(doc, data.workTitle, x, y, maxWidth, data, state)
   // Empresa y puesto: 11 pt Bold #2C3E50, esp. superior 6, inferior 4
-  y += 6
+  y += 3
   y = addTextBold(doc, `${data.job1.role} · ${data.job1.period}`, x, y, maxWidth, { fontSize: ROLE_SIZE })
-  y += 4
+  y += 3
   // Viñetas: 10 pt, • color #555555, indent 15 mm, entre viñetas 3 mm, line height 1.3
   const bulletIndent = 15
   setColor(doc, COLORS.dark)
@@ -366,10 +397,10 @@ function buildPdf(lang, imageBase64) {
     doc.setFontSize(BODY_SIZE)
     doc.text("•", x, y)
     setColor(doc, COLORS.dark)
-    y = addText(doc, point, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3 })
+    y = addText(doc, point, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify" })
     y += 3
   }
-  y += 8
+  y += 3
 
   let page1Break = maybeNewPage(doc, y, data, state)
   if (page1Break) {
@@ -388,14 +419,14 @@ function buildPdf(lang, imageBase64) {
       x = brBefore.x
       maxWidth = brBefore.maxWidth
     }
-    y += 6
+    y += 3
     y = addTextBold(doc, a.name, x, y, maxWidth, { fontSize: ROLE_SIZE })
     y += 4
-    y = addText(doc, a.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, color: COLORS.dark, ...useAutoPageBreakPage1 })
+    y = addText(doc, a.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, color: COLORS.dark, align: "justify", ...useAutoPageBreakPage1 })
     y += 4
     setColor(doc, COLORS.lightGray)
     y = addTextItalic(doc, `Period: ${a.period}`, x, y, maxWidth, { color: COLORS.lightGray })
-    y += 8
+    y += 3
     setColor(doc, COLORS.dark)
   }
 
@@ -411,41 +442,41 @@ function buildPdf(lang, imageBase64) {
 
   // Continuación ACADEMIC EXPERIENCE: tercer proyecto (sin repetir el título de sección)
   const academic3 = data.academic3
-  y += 12
+  y += 3
   y = addTextBold(doc, academic3.name, x, y, maxWidth, useAutoPageBreak)
   y += 4
-  y = addText(doc, academic3.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, ...useAutoPageBreak })
+  y = addText(doc, academic3.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
   setColor(doc, COLORS.lightGray)
   y = addTextItalic(doc, `Period: ${academic3.period}`, x, y, maxWidth, { ...useAutoPageBreak, color: COLORS.lightGray })
-  y += 8
+  y += 3
   setColor(doc, COLORS.dark)
 
   // PERSONAL PROJECTS
   y = addPage2SectionTitle(doc, data.projectsTitle, x, y, maxWidth, data, state)
   if (data.projectsIntro) {
-    y = addText(doc, data.projectsIntro, x, y, maxWidth, { fontSize: BODY_SIZE, lineHeightRatio: 1.4, ...useAutoPageBreak })
-    y += 8
+    y = addText(doc, data.projectsIntro, x, y, maxWidth, { fontSize: BODY_SIZE, lineHeightRatio: 1.4, align: "justify", ...useAutoPageBreak })
+    y += 3
   }
   // Proyecto 1
   y += 6
   y = addTextBold(doc, "Personal web portfolio", x, y, maxWidth, useAutoPageBreak)
   y += 4
-  y = addText(doc, data.proj1, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, ...useAutoPageBreak })
+  y = addText(doc, data.proj1, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
   setColor(doc, COLORS.blue)
   y = addText(doc, "www.enriquemv.com", x, y, maxWidth, { fontSize: BODY_SMALL, ...useAutoPageBreak })
-  y += 8
+  y += 3
   setColor(doc, COLORS.dark)
   // Proyecto 2
   y += 6
   y = addTextBold(doc, "Ataraxia Blog Management and Publishing System", x, y, maxWidth, useAutoPageBreak)
   y += 4
-  y = addText(doc, data.proj2, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, ...useAutoPageBreak })
+  y = addText(doc, data.proj2, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
   setColor(doc, COLORS.blue)
   y = addText(doc, "www.ataraxiapro.com", x, y, maxWidth, { fontSize: BODY_SMALL, ...useAutoPageBreak })
-  y += 8
+  y += 3
   setColor(doc, COLORS.dark)
 
   // ACADEMIC BACKGROUND
@@ -455,12 +486,12 @@ function buildPdf(lang, imageBase64) {
     const parts = e.split(" · ").map((p) => p.trim())
     const titlePart = parts[0] || e
     const periodInst = parts.slice(1).join(" · ")
-    y += 6
+    y += 3
     y = addTextBold(doc, titlePart, x, y, maxWidth, { fontSize: BODY_SIZE, ...useAutoPageBreak })
     y += 2
     setColor(doc, COLORS.lightGray)
     y = addText(doc, periodInst, x, y, maxWidth, { fontSize: BODY_SMALL, ...useAutoPageBreak })
-    y += 4
+    y += 3
     setColor(doc, COLORS.dark)
   }
 
