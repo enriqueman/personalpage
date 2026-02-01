@@ -12,10 +12,10 @@ const MARGIN_LEFT = 15
 const MARGIN_RIGHT = 15
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT // 180 mm
 
-// Columnas: 60% izquierda, 40% derecha, ~70 mm derecha
+// Columnas: 60% izquierda, 40% derecha (fondo #E8F4F8 desde inicio columna hasta margen derecho)
 const COL_GAP = 5
-const LEFT_COL_WIDTH = Math.round(CONTENT_WIDTH * 0.6) - COL_GAP // ~105 mm
-const RIGHT_COL_WIDTH = 70 // ~70 mm según spec
+const LEFT_COL_WIDTH = Math.round(CONTENT_WIDTH * 0.6) - COL_GAP
+const RIGHT_COL_WIDTH = CONTENT_WIDTH * 0.4 // 40% del contenido
 const LEFT_COL_X = MARGIN_LEFT
 const RIGHT_COL_X = MARGIN_LEFT + LEFT_COL_WIDTH + COL_GAP
 
@@ -200,13 +200,15 @@ function addPage2SectionTitle(doc, text, x, y, maxWidth, data, state) {
 }
 
 /**
- * Dibuja el fondo de la columna derecha (#E8F4F8). Si se pasa data, además dibuja SOFT SKILLS en esa columna (solo la primera vez que se añade página 2).
+ * Dibuja el fondo de la columna derecha (#E8F4F8): toda la franja derecha de la página,
+ * incluyendo margen superior, margen derecho y margen inferior (desde RIGHT_COL_X hasta el borde derecho, de 0 a PAGE_HEIGHT).
+ * Si se pasa data, además dibuja SOFT SKILLS en esa columna (solo la primera vez que se añade página 2).
  */
 function drawRightColumnBackground(doc, data) {
   const x = RIGHT_COL_X
-  const y = MARGIN_TOP
-  const w = PAGE_WIDTH - MARGIN_RIGHT - RIGHT_COL_X
-  const h = PAGE_HEIGHT - MARGIN_TOP - MARGIN_BOTTOM
+  const y = 0
+  const w = PAGE_WIDTH - RIGHT_COL_X // hasta el borde derecho (incluye margen derecho)
+  const h = PAGE_HEIGHT // toda la altura (incluye márgenes superior e inferior)
   doc.setFillColor(COLORS.rightColumnBg[0], COLORS.rightColumnBg[1], COLORS.rightColumnBg[2])
   doc.rect(x, y, w, h, "F")
   if (data) {
@@ -240,13 +242,10 @@ function drawRightColumn(doc, data, imageBase64) {
   const w = RIGHT_COL_WIDTH
   let y = MARGIN_TOP
 
-  // Foto 80x80, borde 2 pt #CCCCCC
+  // Foto 80x80, sin borde ni fondo
   if (imageBase64) {
     try {
-      doc.setDrawColor(COLORS.borderGray[0], COLORS.borderGray[1], COLORS.borderGray[2])
-      doc.setLineWidth(2)
-      doc.rect(x, y, PHOTO_SIZE, PHOTO_SIZE)
-      doc.addImage(imageBase64, "PNG", x + 2, y + 2, PHOTO_SIZE - 4, PHOTO_SIZE - 4)
+      doc.addImage(imageBase64, "PNG", x, y, PHOTO_SIZE, PHOTO_SIZE)
     } catch (_) {}
     y += PHOTO_SIZE + 12
   }
