@@ -19,6 +19,7 @@ import {
 import Link from "next/link"
 import { useLanguage } from "@/components/language-provider"
 import { useInView } from "@/hooks/useInView"
+import { DownloadCVButton } from "@/components/download-cv-button"
 
 export default function Home() {
   const { t } = useLanguage()
@@ -323,6 +324,9 @@ export default function Home() {
           <p className="mt-3 max-w-2xl text-base text-muted-foreground sm:text-lg">
             {t("home.contact.invitation")}
           </p>
+          <div className="mt-4">
+            <DownloadCVButton variant="default" size="lg" className="rounded-lg btn-interactive" showLabel={true} />
+          </div>
           <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label={t("home.contact.description")}>
             <li className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
               <Mail className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
