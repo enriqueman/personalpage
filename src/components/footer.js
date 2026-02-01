@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Mail, Linkedin, Github } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
+import { DownloadCVButton } from "@/components/download-cv-button"
 
 export default function Footer() {
   const { t } = useLanguage()
@@ -23,7 +24,7 @@ export default function Footer() {
       external: false,
     },
     {
-      href: "https://www.linkedin.com/in/EnriqueManzano217",
+      href: "https://co.linkedin.com/in/enriquemanzano217",
       label: "LinkedIn",
       icon: Linkedin,
       external: true,
@@ -61,6 +62,7 @@ export default function Footer() {
               >
                 {t("nav.contact")}
               </Link>
+              <DownloadCVButton variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground" showLabel={true} />
             </nav>
 
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">

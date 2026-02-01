@@ -27,6 +27,7 @@ const translations = {
     "nav.skills": "Habilidades",
     "nav.projects": "Proyectos",
     "nav.contact": "Contacto",
+    "cv.download": "Descargar CV",
     "theme.light": "Claro",
     "theme.dark": "Oscuro",
     "theme.system": "Sistema",
@@ -133,8 +134,17 @@ const translations = {
     "experience.job1.title": "Desarrollador equipo Ayte",
     "experience.job1.company": "Ayte",
     "experience.job1.period": "Septiembre 2023 - Actualidad",
-    "experience.job1.description":
-      "Desarrollador de proyectos web usando tecnologías web como NodeJS y React; miembro del equipo de innovación para el desarrollo de agentes con inteligencia Artificial generativa, implementado en canales como Google chat, Microsoft teams y Slack, haciendo uso de tecnologías como RAG y serverless",
+    "experience.job1.intro":
+      "Actualmente formo parte del equipo de soporte HDI Colombia, donde desarrollo mejoras innovadoras de producto y entrego soluciones a los retos del sector asegurador utilizando tecnologías serverless en AWS y bases de datos gestionadas.",
+    "experience.job1.client1.title": "Equipo de innovación GenAI",
+    "experience.job1.client1.description":
+      "Participé en el desarrollo de agentes de IA generativa desplegados en múltiples canales de comunicación, como Microsoft Teams, Google Chat y WhatsApp. Implementé sistemas RAG (Retrieval-Augmented Generation) avanzados con bases de datos vectoriales, bases de conocimiento y orquestación inteligente usando LangChain y LangSmith para habilitar soluciones de IA conversacional escalables.",
+    "experience.job1.client2.title": "Plataforma de suscripción Liberty Seguros Colombia",
+    "experience.job1.client2.description":
+      "Contribuí al desarrollo full-stack de una nueva aplicación de suscripciones para una aseguradora líder. Diseñé un frontend responsive en React y servicios backend escalables en Node.js, con infraestructura serverless en AWS Lambda, DynamoDB y S3 para transacciones de alto volumen y procesamiento de datos.",
+    "experience.job1.client3.title": "Soluciones empresariales",
+    "experience.job1.client3.description":
+      "Participé en el desarrollo de nuevas funcionalidades y mejoras para varios clientes empresariales, entre ellos Allianz y Grupo Lemco (Challenger, Sky). Aproveché tecnologías serverless en AWS para construir servicios web robustos que mejoraron la eficiencia operativa y la experiencia del cliente.",
 
     "experience.academic1.title": "Sistema de notificación para noticias falsas en el contexto político colombiano",
     "experience.academic1.company": "Universidad del Cauca",
@@ -176,11 +186,12 @@ const translations = {
       "Página web para la presentación de mi portafolio personal, construida en Next.js, alojada en S3 y desplegada en CloudFront y Route 53. Implementa tres tipos de ambientes: desarrollo, pruebas y producción, utilizando GitHub Actions y el AWS Serverless Application Model para el despliegue",
     "projects.project2.url": "https://www.enriquemv.com/",
 
-    "projects.project3.title": "Despliegue de Modelos de Machine Learning Usando Fargate",
-    "projects.project3.type": "Despliegue modelos",
+    "projects.project3.title": "Sistema de Gestión y Publicación de Blog Ataraxia",
+    "projects.project3.type": "Full Stack Serverless | Panel administrativo + Blog público con Gen AI · 2024-2025",
     "projects.project3.period": "www.ataraxiapro.com",
     "projects.project3.description":
-      "Despliegue de modelos de machine learning utilizando Docker, AWS ECS, un balanceador de carga y API Gateway. La infraestructura fue implementada con AWS CDK, y el modelo fue desplegado utilizando FastAPI junto con Docker. El frontend, donde se realizan las peticiones, se implementó en mi página de pruebas y blog personal.",
+      "Sistema completo de gestión de contenidos para el blog de Ataraxia, demostrando arquitectura serverless escalable en AWS. El panel administrativo (Next.js + React 19) permite a editores autenticarse, crear y gestionar borradores de artículos, autores, categorías y etiquetas, además de subir y procesar imágenes.<br/><br/>Backend Serverless (AWS Lambda): Implementé microservicios con Lambda para autenticación JWT con DynamoDB, gestión de borradores, procesamiento y almacenamiento de imágenes en S3, y orquestación de publicación. La función de publicación automatiza la lectura de datos desde DynamoDB, descarga de assets desde S3, y generación de contenido estático con commit automático a Git, activando despliegue en GitHub Pages mediante webhooks. Esto demuestra capacidad de ETL y automatización de pipelines de datos.<br/><br/>Frontend + Arquitectura UI: Implementé Atomic Design (atoms, molecules, organisms, templates) para componentes reutilizables y escalables, utilizando React 19, Tailwind CSS y Radix UI para una UI profesional y accesible.<br/><br/>Seguridad e Infraestructura: Control granular de acceso por roles (EDITOR, ADMIN) con validación robusta (Joi y Zod), JWT para autenticación stateless, CI/CD automatizado con GitHub Actions, y deployments sin servidor con API Gateway + Lambda + DynamoDB.<br/><br/>Tecnologías: Next.js 15, React 19, Tailwind CSS, Radix UI, AWS (Lambda, API Gateway, DynamoDB, S3), GitHub Actions, Node.js, JWT.",
+    "projects.project3.url": "https://www.ataraxiapro.com/",
 
     "projects.project4.title": "Sistema de Gestor Estratégico de Talento y Habilidades",
     "projects.project4.type": "IA aplicada / Trabajo de grado",
@@ -277,6 +288,7 @@ const translations = {
     "nav.skills": "Skills",
     "nav.projects": "Projects",
     "nav.contact": "Contact",
+    "cv.download": "Download CV",
     "theme.light": "Light",
     "theme.dark": "Dark",
     "theme.system": "System",
@@ -382,8 +394,17 @@ const translations = {
     "experience.job1.title": "Developer at Ayte Team",
     "experience.job1.company": "Ayte",
     "experience.job1.period": "September 2023 - Present",
-    "experience.job1.description":
-      "Web project developer using technologies such as NodeJS and React; member of the innovation team for the development of agents with generative Artificial Intelligence, implemented in channels such as Google Chat, Microsoft Teams, and Slack, using technologies such as RAG and serverless",
+    "experience.job1.intro":
+      "I am currently a member of the HDI Colombia support team, where I develop innovative product improvements and deliver solutions to insurance industry challenges leveraging serverless AWS technologies and managed databases.",
+    "experience.job1.client1.title": "GenAI Innovation Team",
+    "experience.job1.client1.description":
+      "I participated in developing generative AI agents deployed across multiple communication channels including Microsoft Teams, Google Chat, and WhatsApp. I implemented advanced RAG (Retrieval-Augmented Generation) systems with vectorized databases, knowledge bases, and intelligent orchestration using LangChain and LangSmith to enable scalable conversational AI solutions.",
+    "experience.job1.client2.title": "Liberty Seguros Colombia Subscription Platform",
+    "experience.job1.client2.description":
+      "I contributed to the full-stack development of a new subscription application for a major insurance provider. I engineered a responsive React frontend and scalable Node.js backend services, designing a serverless infrastructure using AWS Lambda, DynamoDB, and S3 to handle high-volume transactions and data processing efficiently.",
+    "experience.job1.client3.title": "Enterprise Solutions",
+    "experience.job1.client3.description":
+      "I participated in developing new features and enhancements for multiple enterprise clients including Allianz and Grupo Lemco (Challenger, Sky). I leveraged serverless AWS technologies to build robust web services that improved operational efficiency and customer experience.",
 
     "experience.academic1.title": "Fake News Notification System in the Colombian Political Context",
     "experience.academic1.company": "University of Cauca",
@@ -425,11 +446,12 @@ const translations = {
       "Website for the presentation of my personal portfolio, built in Next.js, hosted on S3, and deployed on CloudFront and Route 53. It implements three types of environments: development, testing, and production, using GitHub Actions and the AWS Serverless Application Model for deployment",
     "projects.project2.url": "https://www.enriquemv.com/",
 
-    "projects.project3.title": "Deployment of Machine Learning Models Using Fargate",
-    "projects.project3.type": "Model Deployment",
+    "projects.project3.title": "Ataraxia Blog Management and Publishing System",
+    "projects.project3.type": "Full Stack Serverless | Admin panel + Public blog with Gen AI · 2024-2025",
     "projects.project3.period": "www.ataraxiapro.com",
     "projects.project3.description":
-      "Deployment of machine learning models using Docker, AWS ECS, a load balancer, and API Gateway. The infrastructure was implemented with AWS CDK, and the model was deployed using FastAPI along with Docker. The frontend, where requests are made, was implemented on my testing and personal blog page.",
+      "Complete content management system for the Ataraxia blog, demonstrating scalable serverless architecture on AWS. The admin panel (Next.js + React 19) lets editors authenticate, create and manage article drafts, authors, categories and tags, and upload and process images.<br/><br/>Serverless Backend (AWS Lambda): I implemented microservices with Lambda for JWT authentication with DynamoDB, draft management, image processing and storage in S3, and publication orchestration. The publish function automates reading data from DynamoDB, downloading assets from S3, and generating static content with automatic Git commit, triggering deployment to GitHub Pages via webhooks. This demonstrates ETL capability and data pipeline automation.<br/><br/>Frontend + UI Architecture: I implemented Atomic Design (atoms, molecules, organisms, templates) for reusable, scalable components, using React 19, Tailwind CSS and Radix UI for a professional, accessible UI.<br/><br/>Security and Infrastructure: Granular role-based access control (EDITOR, ADMIN) with robust validation (Joi and Zod), JWT for stateless authentication, automated CI/CD with GitHub Actions, and serverless deployments with API Gateway + Lambda + DynamoDB.<br/><br/>Technologies: Next.js 15, React 19, Tailwind CSS, Radix UI, AWS (Lambda, API Gateway, DynamoDB, S3), GitHub Actions, Node.js, JWT.",
+    "projects.project3.url": "https://www.ataraxiapro.com/",
 
     "projects.project4.title": "Strategic Talent and Skills Management System",
     "projects.project4.type": "Applied AI / Thesis project",
@@ -528,6 +550,7 @@ const translations = {
     "nav.skills": "Habilidades",
     "nav.projects": "Projetos",
     "nav.contact": "Contato",
+    "cv.download": "Baixar currículo",
     "theme.light": "Claro",
     "theme.dark": "Escuro",
     "theme.system": "Sistema",
@@ -591,8 +614,17 @@ const translations = {
     "experience.job1.title": "Desenvolvedor da equipe Ayte",
     "experience.job1.company": "Ayte",
     "experience.job1.period": "Setembro de 2023 - Atual",
-    "experience.job1.description":
-      "Desenvolvedor de projetos web usando tecnologias como NodeJS e React; membro da equipe de inovação para desenvolvimento de agentes com Inteligência Artificial generativa, implementados em canais como Google Chat, Microsoft Teams e Slack, utilizando tecnologias como RAG e serverless",
+    "experience.job1.intro":
+      "Atualmente faço parte da equipe de suporte HDI Colômbia, onde desenvolvo melhorias inovadoras de produtos e entrego soluções para os desafios do setor de seguros utilizando tecnologias serverless na AWS e bancos de dados gerenciados.",
+    "experience.job1.client1.title": "Equipe de inovação GenAI",
+    "experience.job1.client1.description":
+      "Participei do desenvolvimento de agentes de IA generativa implantados em múltiplos canais de comunicação, incluindo Microsoft Teams, Google Chat e WhatsApp. Implementei sistemas RAG (Retrieval-Augmented Generation) avançados com bancos de dados vetoriais, bases de conhecimento e orquestração inteligente usando LangChain e LangSmith para habilitar soluções de IA conversacional escaláveis.",
+    "experience.job1.client2.title": "Plataforma de assinatura Liberty Seguros Colômbia",
+    "experience.job1.client2.description":
+      "Contribuí para o desenvolvimento full-stack de uma nova aplicação de assinaturas para uma grande seguradora. Projetei um frontend responsivo em React e serviços backend escaláveis em Node.js, com infraestrutura serverless em AWS Lambda, DynamoDB e S3 para transações de alto volume e processamento de dados.",
+    "experience.job1.client3.title": "Soluções empresariais",
+    "experience.job1.client3.description":
+      "Participei do desenvolvimento de novas funcionalidades e melhorias para vários clientes empresariais, incluindo Allianz e Grupo Lemco (Challenger, Sky). Utilizei tecnologias serverless na AWS para construir serviços web robustos que melhoraram a eficiência operacional e a experiência do cliente.",
 
     "experience.academic1.title": "Sistema de notificação para fake news no contexto político colombiano",
     "experience.academic1.company": "Universidade del Cauca",
@@ -634,11 +666,12 @@ const translations = {
       "Site para apresentação do meu portfólio pessoal, construído em Next.js, hospedado no S3 e implantado no CloudFront e Route 53. Implementa três tipos de ambientes: desenvolvimento, testes e produção, utilizando GitHub Actions e AWS Serverless Application Model para implantação",
     "projects.project2.url": "https://www.enriquemv.com/",
 
-    "projects.project3.title": "Implantação de Modelos de Machine Learning Usando Fargate",
-    "projects.project3.type": "Implantação de Modelos",
+    "projects.project3.title": "Sistema de Gestão e Publicação de Blog Ataraxia",
+    "projects.project3.type": "Full Stack Serverless | Painel administrativo + Blog público com Gen AI · 2024-2025",
     "projects.project3.period": "www.ataraxiapro.com",
     "projects.project3.description":
-      "Implantação de modelos de machine learning utilizando Docker, AWS ECS, balanceador de carga e API Gateway. A infraestrutura foi implementada com AWS CDK, e o modelo foi implantado usando FastAPI com Docker. O frontend, onde são feitas as requisições, foi implementado na minha página de testes e blog pessoal.",
+      "Sistema completo de gestão de conteúdos para o blog Ataraxia, demonstrando arquitetura serverless escalável na AWS. O painel administrativo (Next.js + React 19) permite que editores se autentiquem, criem e gerenciem rascunhos de artigos, autores, categorias e tags, além de enviar e processar imagens.<br/><br/>Backend Serverless (AWS Lambda): Implementei microserviços com Lambda para autenticação JWT com DynamoDB, gestão de rascunhos, processamento e armazenamento de imagens no S3, e orquestração de publicação. A função de publicação automatiza a leitura de dados do DynamoDB, download de assets do S3 e geração de conteúdo estático com commit automático no Git, acionando implantação no GitHub Pages via webhooks. Isso demonstra capacidade de ETL e automação de pipelines de dados.<br/><br/>Frontend + Arquitetura UI: Implementei Atomic Design (atoms, molecules, organisms, templates) para componentes reutilizáveis e escaláveis, utilizando React 19, Tailwind CSS e Radix UI para uma UI profissional e acessível.<br/><br/>Segurança e Infraestrutura: Controle granular de acesso por funções (EDITOR, ADMIN) com validação robusta (Joi e Zod), JWT para autenticação stateless, CI/CD automatizado com GitHub Actions e implantações serverless com API Gateway + Lambda + DynamoDB.<br/><br/>Tecnologias: Next.js 15, React 19, Tailwind CSS, Radix UI, AWS (Lambda, API Gateway, DynamoDB, S3), GitHub Actions, Node.js, JWT.",
+    "projects.project3.url": "https://www.ataraxiapro.com/",
 
     "projects.project4.title": "Sistema de Gestão Estratégica de Talento e Habilidades",
     "projects.project4.type": "IA aplicada / Projeto de conclusão",
@@ -728,6 +761,7 @@ const translations = {
     "nav.skills": "Competenze",
     "nav.projects": "Progetti",
     "nav.contact": "Contatto",
+    "cv.download": "Scarica CV",
     "theme.light": "Chiaro",
     "theme.dark": "Scuro",
     "theme.system": "Sistema",
@@ -791,8 +825,17 @@ const translations = {
     "experience.job1.title": "Sviluppatore nel Team Ayte",
     "experience.job1.company": "Ayte",
     "experience.job1.period": "Settembre 2023 - Attuale",
-    "experience.job1.description":
-      "Sviluppatore di progetti web utilizzando tecnologie come NodeJS e React; membro del team innovazione per lo sviluppo di agenti con Intelligenza Artificiale generativa, implementati in canali come Google Chat, Microsoft Teams e Slack, utilizzando tecnologie come RAG e serverless",
+    "experience.job1.intro":
+      "Attualmente faccio parte del team di supporto HDI Colombia, dove sviluppo miglioramenti innovativi dei prodotti e fornisco soluzioni alle sfide del settore assicurativo utilizzando tecnologie serverless su AWS e database gestiti.",
+    "experience.job1.client1.title": "Team innovazione GenAI",
+    "experience.job1.client1.description":
+      "Ho partecipato allo sviluppo di agenti di IA generativa distribuiti su più canali di comunicazione tra cui Microsoft Teams, Google Chat e WhatsApp. Ho implementato sistemi RAG (Retrieval-Augmented Generation) avanzati con database vettoriali, basi di conoscenza e orchestrazione intelligente con LangChain e LangSmith per soluzioni di IA conversazionale scalabili.",
+    "experience.job1.client2.title": "Piattaforma abbonamenti Liberty Seguros Colombia",
+    "experience.job1.client2.description":
+      "Ho contribuito allo sviluppo full-stack di una nuova applicazione di abbonamento per un importante assicuratore. Ho progettato un frontend reattivo in React e servizi backend scalabili in Node.js, con infrastruttura serverless su AWS Lambda, DynamoDB e S3 per transazioni ad alto volume e elaborazione dati.",
+    "experience.job1.client3.title": "Soluzioni enterprise",
+    "experience.job1.client3.description":
+      "Ho partecipato allo sviluppo di nuove funzionalità e miglioramenti per diversi clienti enterprise tra cui Allianz e Grupo Lemco (Challenger, Sky). Ho utilizzato tecnologie serverless AWS per costruire servizi web robusti che hanno migliorato l'efficienza operativa e l'esperienza cliente.",
 
     "experience.academic1.title": "Sistema di notifica per fake news nel contesto politico colombiano",
     "experience.academic1.company": "Universidad del Cauca",
@@ -834,11 +877,12 @@ const translations = {
       "Sito web per la presentazione del mio portfolio personale, costruito in Next.js, ospitato su S3 e deployato su CloudFront e Route 53. Implementa tre tipi di ambienti: sviluppo, testing e produzione, utilizzando GitHub Actions e AWS Serverless Application Model per il deployment",
     "projects.project2.url": "https://www.enriquemv.com/",
 
-    "projects.project3.title": "Deployment di Modelli Machine Learning Usando Fargate",
-    "projects.project3.type": "Deployment Modelli",
+    "projects.project3.title": "Sistema di Gestione e Pubblicazione del Blog Ataraxia",
+    "projects.project3.type": "Full Stack Serverless | Pannello admin + Blog pubblico con Gen AI · 2024-2025",
     "projects.project3.period": "www.ataraxiapro.com",
     "projects.project3.description":
-      "Deployment di modelli machine learning utilizzando Docker, AWS ECS, un bilanciatore di carico e API Gateway. L'infrastruttura è stata implementata con AWS CDK, e il modello è stato deployato usando FastAPI con Docker. Il frontend, dove vengono effettuate le richieste, è stato implementato sulla mia pagina di test e blog personale.",
+      "Sistema completo di gestione dei contenuti per il blog Ataraxia, che dimostra un'architettura serverless scalabile su AWS. Il pannello amministrativo (Next.js + React 19) consente agli editori di autenticarsi, creare e gestire bozze di articoli, autori, categorie e tag, oltre a caricare e processare immagini.<br/><br/>Backend Serverless (AWS Lambda): Ho implementato microservizi con Lambda per autenticazione JWT con DynamoDB, gestione delle bozze, elaborazione e archiviazione di immagini su S3 e orchestrazione della pubblicazione. La funzione di pubblicazione automatizza la lettura dei dati da DynamoDB, il download degli asset da S3 e la generazione di contenuti statici con commit automatico su Git, attivando il deployment su GitHub Pages tramite webhook. Questo dimostra capacità ETL e automazione di pipeline dati.<br/><br/>Frontend + Architettura UI: Ho implementato Atomic Design (atoms, molecules, organisms, templates) per componenti riutilizzabili e scalabili, utilizzando React 19, Tailwind CSS e Radix UI per un'interfaccia professionale e accessibile.<br/><br/>Sicurezza e Infrastruttura: Controllo granulare dell'accesso per ruoli (EDITOR, ADMIN) con validazione robusta (Joi e Zod), JWT per autenticazione stateless, CI/CD automatizzato con GitHub Actions e deployment serverless con API Gateway + Lambda + DynamoDB.<br/><br/>Tecnologie: Next.js 15, React 19, Tailwind CSS, Radix UI, AWS (Lambda, API Gateway, DynamoDB, S3), GitHub Actions, Node.js, JWT.",
+    "projects.project3.url": "https://www.ataraxiapro.com/",
 
     "projects.project4.title": "Sistema di Gestione Strategica del Talento e delle Competenze",
     "projects.project4.type": "IA applicata / Progetto di tesi",

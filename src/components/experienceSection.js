@@ -13,7 +13,12 @@ export default function ExperienceSection({ type = "work" }) {
       title: t("experience.job1.title"),
       company: t("experience.job1.company"),
       period: t("experience.job1.period"),
-      description: t("experience.job1.description"),
+      intro: t("experience.job1.intro"),
+      clients: [
+        { title: t("experience.job1.client1.title"), description: t("experience.job1.client1.description") },
+        { title: t("experience.job1.client2.title"), description: t("experience.job1.client2.description") },
+        { title: t("experience.job1.client3.title"), description: t("experience.job1.client3.description") },
+      ],
     },
   ]
 
@@ -50,6 +55,8 @@ export default function ExperienceSection({ type = "work" }) {
           company={exp.company}
           period={exp.period}
           description={exp.description}
+          intro={exp.intro}
+          clients={exp.clients}
           url={exp.url}
           viewSiteLabel={t("projects.viewSite")}
           className={`animate-stagger-item ${cardHover}`}

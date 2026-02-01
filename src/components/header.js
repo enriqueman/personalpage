@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
+import { DownloadCVButton } from "@/components/download-cv-button"
 import { useLanguage } from "@/components/language-provider"
 
 export default function Header() {
@@ -67,6 +68,7 @@ export default function Header() {
         <div className="hidden md:flex items-center justify-end gap-3">
           <LanguageToggle />
           <ThemeToggle />
+          <DownloadCVButton variant="outline" size="default" className="rounded-lg btn-interactive" showLabel={true} />
           <Button asChild size="default" className="rounded-lg btn-interactive">
             <Link href="/#contact" className="whitespace-nowrap">
               {t("nav.contact")}
@@ -111,7 +113,8 @@ export default function Header() {
                 </Link>
               ))}
             </nav>
-            <div className="mt-6 pt-6 border-t border-border">
+            <div className="mt-6 pt-6 border-t border-border flex flex-col gap-3">
+              <DownloadCVButton variant="outline" className="w-full rounded-lg btn-interactive" size="lg" showLabel={true} />
               <Button asChild className="w-full rounded-lg btn-interactive" size="lg">
                 <Link href="/#contact" onClick={() => setIsMenuOpen(false)}>
                   {t("nav.contact")}

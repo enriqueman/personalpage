@@ -41,6 +41,7 @@ export default function ProjectSection() {
       tipe: t("projects.project3.type"),
       period: t("projects.project3.period"),
       description: t("projects.project3.description"),
+      url: t("projects.project3.url"),
     },
     {
       title: t("projects.project1.title"),
