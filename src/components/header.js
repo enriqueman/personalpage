@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -92,38 +93,56 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Panel móvil: mismo tono secondary y acento que el resto de la página */}
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 top-16 z-40 md:hidden stats-strip border-t border-border"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menú de navegación"
-        >
-          <div className="relative flex flex-col h-full overflow-auto px-4 py-6 hero-bg">
-            <nav className="flex flex-col gap-1" aria-label="Navegación móvil">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.path}
-                  className={`rounded-lg px-4 py-3 text-base font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${isActive(item.path) ? "bg-primary/10 text-primary border-l-4 border-l-primary" : "text-foreground hover:bg-secondary/80 border-l-4 border-l-transparent"}`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-            <div className="mt-6 pt-6 border-t border-border flex flex-col gap-3">
-              <DownloadCVButton variant="outline" className="w-full rounded-lg btn-interactive" size="lg" showLabel={true} />
-              <Button asChild className="w-full rounded-lg btn-interactive" size="lg">
-                <Link href="/#contact" onClick={() => setIsMenuOpen(false)}>
-                  {t("nav.contact")}
-                </Link>
-              </Button>
+      {/* Panel móvil: renderizado en portal para evitar overflow/stacking del header */}
+      {typeof document !== "undefined" &&
+        isMenuOpen &&
+        createPortal(
+          <div
+            className="fixed left-0 right-0 top-16 bottom-0 z-[100] md:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú de navegación"
+          >
+            {/* Fondo: debajo del header; tocar cierra */}
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/40 dark:bg-black/60"
+              aria-label="Cerrar menú"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            {/* Panel: mismo área, fondo sólido encima del backdrop, opciones visibles */}
+            <div
+              className="absolute inset-0 overflow-y-auto border-t border-border z-10"
+              style={{ color: "hsl(var(--foreground))", backgroundColor: "hsl(var(--background))" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="px-4 py-6">
+                <nav className="flex flex-col gap-1" aria-label="Navegación móvil">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.path}
+                      className={`block rounded-lg px-4 py-3 text-base font-medium border-l-4 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${isActive(item.path) ? "bg-primary/10 text-primary border-l-primary" : "hover:bg-muted border-l-transparent"}`}
+                      style={{ color: "inherit" }}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </nav>
+                <div className="mt-6 pt-6 border-t border-border flex flex-col gap-3">
+                  <DownloadCVButton variant="outline" className="w-full rounded-lg btn-interactive" size="lg" showLabel={true} />
+                  <Button asChild className="w-full rounded-lg btn-interactive" size="lg">
+                    <Link href="/#contact" onClick={() => setIsMenuOpen(false)}>
+                      {t("nav.contact")}
+                    </Link>
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </header>
   )
 }
