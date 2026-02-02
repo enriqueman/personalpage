@@ -35,7 +35,7 @@ const translations = {
     // Home page – Hero
     "home.hero.greeting": "Hola, soy",
     "home.hero.name": "Cesar Enrique Manzano Velasco",
-    "home.hero.title": "MSc Inteligencia Artificial Aplicada / Ingeniero en Electrónica y Telecomunicaciones · Soluciones de IA en la nube",
+    "home.hero.title": "Magíster en Inteligencia Artificial · Ingeniero en Electrónica y Telecomunicaciones · Soluciones de IA en la nube",
     "home.hero.bio":
       "Construyo soluciones de IA y arquitecturas serverless en la nube. Especializado en llevar modelos y productos desde el diseño hasta producción — backend, datos e infraestructura.",
     "home.hero.cta.projects": "Ver proyectos",
@@ -296,7 +296,7 @@ const translations = {
     // Home page – Hero
     "home.hero.greeting": "Hi, I'm",
     "home.hero.name": "Cesar Enrique Manzano Velasco",
-    "home.hero.title": "MSc Applied Artificial Intelligence / Electronics and Telecommunications Engineer · AI Solutions in the Cloud",
+    "home.hero.title": "Master's in Artificial Intelligence · Electronics and Telecommunications Engineer · AI Solutions in the Cloud",
     "home.hero.bio":
       "I build AI solutions and serverless cloud architectures. I specialize in taking models and products from design to production—backend, data, and infrastructure.",
     "home.hero.cta.projects": "View projects",
@@ -544,7 +544,7 @@ const translations = {
     // Header
     "nav.home": "Início",
     "home.hero.greeting": "Olá, sou",
-    "home.hero.title": "MSc Inteligência Artificial Aplicada / Engenheiro de Eletrônica e Telecomunicações · Soluções de IA na nuvem",
+    "home.hero.title": "Mestrado em Inteligência Artificial Aplicada / Engenheiro de Eletrônica e Telecomunicações · Soluções de IA na nuvem",
     "nav.experience": "Experiência",
     "nav.education": "Educação",
     "nav.skills": "Habilidades",
@@ -755,7 +755,7 @@ const translations = {
     // Header
     "nav.home": "Home",
     "home.hero.greeting": "Ciao, sono",
-    "home.hero.title": "MSc Intelligenza Artificiale Applicata / Ingegnere Elettronico e delle Telecomunicazioni · Soluzioni IA nel cloud",
+    "home.hero.title": "Master in Intelligenza Artificiale / Ingegnere Elettronico e delle Telecomunicazioni · Soluzioni IA nel cloud",
     "nav.experience": "Esperienza",
     "nav.education": "Formazione",
     "nav.skills": "Competenze",
