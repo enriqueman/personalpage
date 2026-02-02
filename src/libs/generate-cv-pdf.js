@@ -46,6 +46,23 @@ const PERIOD_SIZE = 9
 
 const FONT = "helvetica"
 
+// Iconos de contacto: rutas en public/icons (fallback Zapf Dingbats si no hay imagen)
+const CONTACT_ICON_PATHS = {
+  phone: "/icons/ring-phone.png",
+  location: "/icons/maps-and-location.png",
+  email: "/icons/correo-electronico.png",
+  web: "/icons/senal-mundial.png",
+  linkedin: "/icons/linkedin.png",
+  github: "/icons/github.png",
+}
+// Zapf Dingbats fallback cuando no hay imagen cargada
+const ZAPF_PHONE = 37
+const ZAPF_LOCATION = 47
+const ZAPF_EMAIL = 65
+const ZAPF_WEB = 56
+const CONTACT_ICON_SIZE = 4 // mm
+const CONTACT_ICON_GAP = 2 // mm
+
 /**
  * Aplica color de texto.
  */
@@ -180,6 +197,69 @@ function addRightSectionTitle(doc, text, x, y, colWidth) {
 }
 
 /**
+ * Dibuja el icono de contacto: imagen de public/icons si existe en contactIcons, si no Zapf Dingbats o badge.
+ * contactIcons: { phone?, location?, web?, linkedin?, github? } en base64.
+ */
+function drawContactIcon(doc, iconType, x, y, contactIcons = {}) {
+  const size = CONTACT_ICON_SIZE
+  const img = contactIcons[iconType]
+  if (img) {
+    try {
+      doc.addImage(img, "PNG", x, y - size, size, size)
+    } catch (_) {}
+    doc.setFont(FONT, "normal")
+    return size
+  }
+  setColor(doc, COLORS.blue)
+  if (iconType === "phone") {
+    doc.setFont("zapfdingbats", "normal")
+    doc.setFontSize(BODY_SMALL)
+    doc.text(String.fromCharCode(ZAPF_PHONE), x, y)
+  } else if (iconType === "location") {
+    doc.setFont("zapfdingbats", "normal")
+    doc.setFontSize(BODY_SMALL)
+    doc.text(String.fromCharCode(ZAPF_LOCATION), x, y)
+  } else if (iconType === "email") {
+    doc.setFont("zapfdingbats", "normal")
+    doc.setFontSize(BODY_SMALL)
+    doc.text(String.fromCharCode(ZAPF_EMAIL), x, y)
+  } else if (iconType === "web") {
+    doc.setFont("zapfdingbats", "normal")
+    doc.setFontSize(BODY_SMALL)
+    doc.text(String.fromCharCode(ZAPF_WEB), x, y)
+  } else if (iconType === "linkedin" || iconType === "github") {
+    doc.setFont(FONT, "bold")
+    doc.setFontSize(6)
+    const badgeW = 5
+    const badgeH = 3.5
+    doc.setFillColor(COLORS.blue[0], COLORS.blue[1], COLORS.blue[2])
+    doc.roundedRect(x, y - badgeH + 1, badgeW, badgeH, 0.8, 0.8, "F")
+    setColor(doc, [255, 255, 255])
+    const badgeText = iconType === "linkedin" ? "in" : "G"
+    doc.text(badgeText, x + badgeW / 2 - doc.getTextWidth(badgeText) / 2, y - 0.5)
+    setColor(doc, COLORS.blue)
+    doc.setFont(FONT, "normal")
+    return badgeW
+  }
+  doc.setFont(FONT, "normal")
+  return size
+}
+
+/**
+ * Dibuja una línea de contacto con icono + valor. iconType: "phone" | "location" | "email" | "web" | "linkedin" | "github".
+ * contactIcons: objeto con base64 de iconos desde public/icons.
+ */
+function addContactItem(doc, iconType, value, x, y, wItem, contactIcons = {}) {
+  const iconW = drawContactIcon(doc, iconType, x, y, contactIcons)
+  const gap = CONTACT_ICON_GAP
+  doc.setFont(FONT, "normal")
+  setColor(doc, COLORS.dark)
+  doc.setFontSize(BODY_SMALL)
+  y = addText(doc, value, x + iconW + gap, y, wItem - iconW - gap, { fontSize: BODY_SMALL, lineHeightRatio: 1.2 })
+  return y
+}
+
+/**
  * Título de sección página 2+ (mismo estilo que izquierda).
  * Si hace falta nueva página, dibuja fondo columna derecha (y SOFT SKILLS la primera vez).
  */
@@ -239,7 +319,7 @@ function maybeNewPage(doc, y, data, state) {
  * Columna derecha página 1: fondo #E8F4F8, foto 80x80 con borde, Contact, Languages, Skills.
  * SOFT SKILLS se dibuja en la columna derecha de la página 2 para que no se corte.
  */
-function drawRightColumn(doc, data, imageBase64) {
+function drawRightColumn(doc, data, imageBase64, contactIcons = {}) {
   drawRightColumnBackground(doc)
 
   const x = RIGHT_COL_X
@@ -261,19 +341,20 @@ function drawRightColumn(doc, data, imageBase64) {
   const lineHeight = 1.3
   const betweenLines = 4
 
-  // CONTACT
+  // CONTACT: cada ítem con iconos de public/icons (fallback Zapf/badge)
   y = addRightSectionTitle(doc, data.contactTitle, xTitle, y, wTitle)
-  setColor(doc, COLORS.dark)
-  doc.setFontSize(BODY_SMALL)
-  doc.setFont(FONT, "normal")
-  y = addText(doc, data.phone, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
-  y += betweenLines / 2
-  y = addText(doc, data.location, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
-  y += betweenLines / 2
-  y = addText(doc, data.email, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
-  y += betweenLines
-  setColor(doc, COLORS.blue)
-  y = addText(doc, `${data.web} · LinkedIn: ${data.linkedin} · GitHub: ${data.github}`, xItem, y, wItem, { fontSize: BODY_SMALL, lineHeightRatio: lineHeight })
+  const contactGap = 3
+  y = addContactItem(doc, "phone", data.phone, xItem, y, wItem, contactIcons)
+  y += contactGap
+  y = addContactItem(doc, "location", data.location, xItem, y, wItem, contactIcons)
+  y += contactGap
+  y = addContactItem(doc, "email", data.email, xItem, y, wItem, contactIcons)
+  y += contactGap
+  y = addContactItem(doc, "web", data.web, xItem, y, wItem, contactIcons)
+  y += contactGap
+  y = addContactItem(doc, "linkedin", data.linkedin, xItem, y, wItem, contactIcons)
+  y += contactGap
+  y = addContactItem(doc, "github", data.github, xItem, y, wItem, contactIcons)
   y += 12
   setColor(doc, COLORS.dark)
 
@@ -345,11 +426,11 @@ function drawPersonalReferencesInRightColumn(doc, data, startY) {
   }
 }
 
-function loadProfileImageAsBase64() {
-  const url = typeof window !== "undefined" ? `${window.location.origin}/enriqueManzano.png` : ""
-  if (!url) return Promise.resolve(null)
+function loadImageAsBase64(path) {
+  if (typeof window === "undefined") return Promise.resolve(null)
+  const url = `${window.location.origin}${path}`
   return fetch(url)
-    .then((r) => r.blob())
+    .then((r) => (r.ok ? r.blob() : Promise.reject(new Error("Not found"))))
     .then(
       (blob) =>
         new Promise((resolve, reject) => {
@@ -362,7 +443,20 @@ function loadProfileImageAsBase64() {
     .catch(() => null)
 }
 
-function buildPdf(lang, imageBase64) {
+function loadProfileImageAsBase64() {
+  return loadImageAsBase64("/enriqueManzano.png")
+}
+
+/** Carga todos los iconos de contacto desde public/icons. Devuelve { phone, location, email, web, linkedin, github }. */
+function loadContactIcons() {
+  if (typeof window === "undefined") return Promise.resolve({})
+  const entries = Object.entries(CONTACT_ICON_PATHS)
+  return Promise.all(entries.map(([key, path]) => loadImageAsBase64(path).then((data) => [key, data])))
+    .then((results) => Object.fromEntries(results.filter(([, v]) => v != null)))
+    .catch(() => ({}))
+}
+
+function buildPdf(lang, imageBase64, contactIcons = {}) {
   const data = cvData[lang] || cvData.en
   const doc = new jsPDF({ unit: "mm", format: "a4" })
   const state = { softSkillsDrawnInRightColumn: false }
@@ -370,8 +464,8 @@ function buildPdf(lang, imageBase64) {
   // Fondo blanco implícito; colores de texto se aplican en cada bloque
   setColor(doc, COLORS.dark)
 
-  // ---------- Página 1: columna derecha (Photo, Contact, Languages, Skills; SOFT SKILLS va en página 2) ----------
-  drawRightColumn(doc, data, imageBase64)
+  // ---------- Página 1: columna derecha (Photo, Contact con iconos de public/icons, Languages, Skills) ----------
+  drawRightColumn(doc, data, imageBase64, contactIcons)
 
   // ---------- Página 1: columna izquierda ----------
   let x = LEFT_COL_X
@@ -518,13 +612,13 @@ export function downloadCvPdf(lang) {
   const filename =
     safeLang === "es" ? "CV_Cesar_Enrique_Manzano_Velasco.pdf" : "CV_Cesar_Enrique_Manzano_Velasco_EN.pdf"
 
-  loadProfileImageAsBase64()
-    .then((imageBase64) => {
-      const doc = buildPdf(safeLang, imageBase64)
+  Promise.all([loadProfileImageAsBase64(), loadContactIcons()])
+    .then(([imageBase64, contactIcons]) => {
+      const doc = buildPdf(safeLang, imageBase64, contactIcons || {})
       doc.save(filename)
     })
     .catch(() => {
-      const doc = buildPdf(safeLang, null)
+      const doc = buildPdf(safeLang, null, {})
       doc.save(filename)
     })
 }
