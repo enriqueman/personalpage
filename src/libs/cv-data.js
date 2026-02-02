@@ -21,6 +21,7 @@ export const cvData = {
       ],
     },
 
+    periodLabel: "Periodo",
     academicTitle: "EXPERIENCIA ACADÉMICA",
     academic1: {
       name: "Sistema de Gestión Estratégica de Talento y Habilidades",
@@ -40,7 +41,9 @@ export const cvData = {
 
     projectsTitle: "PROYECTOS PERSONALES",
     projectsIntro: "A lo largo de mi carrera profesional he llevado a cabo diferentes proyectos para fortalecer mis habilidades. Algunos de estos proyectos siguen en desarrollo.",
+    proj1Title: "Portafolio web personal",
     proj1: "Portafolio web personal: sitio para la presentación de mi portafolio, construido en Next.js, alojado en S3 y desplegado en CloudFront y Route 53. Implementa entornos de desarrollo, pruebas y producción, desplegados mediante GitHub Actions con AWS SAM. www.enriquemv.com",
+    proj2Title: "Sistema de gestión y publicación del blog Ataraxia",
     proj2: "Sistema de gestión y publicación del blog Ataraxia: CMS serverless Full Stack con panel administrativo en Next.js y publicación automática de blog estático. Microservicios AWS Lambda para autenticación JWT, gestión de contenido, procesamiento de imágenes en S3 y publicación automática con despliegue en GitHub Pages. Next.js 15, React 19, AWS Lambda, DynamoDB, S3, GitHub Actions. www.ataraxiapro.com",
 
     educationTitle: "FORMACIÓN ACADÉMICA",
@@ -90,6 +93,7 @@ export const cvData = {
       ],
     },
 
+    periodLabel: "Period",
     academicTitle: "ACADEMIC EXPERIENCE",
     academic1: {
       name: "Strategic Talent and Skills Management System",
@@ -109,7 +113,9 @@ export const cvData = {
 
     projectsTitle: "PERSONAL PROJECTS",
     projectsIntro: "Throughout my professional career, I have carried out different projects in order to strengthen my skills as a professional. Some of these projects are still in development.",
+    proj1Title: "Personal web portfolio",
     proj1: "Personal web portfolio: website for the presentation of my personal portfolio, built in Next.js, hosted in S3 and deployed in CloudFront and Route 53. It implements three types of environments: development, testing and production, deployed through GitHub Actions using AWS SAM (Serverless Application Model). www.enriquemv.com",
+    proj2Title: "Ataraxia Blog Management and Publishing System",
     proj2: "Ataraxia Blog Management and Publishing System: Full Stack serverless CMS with administrative panel in Next.js and automatic static blog publishing. AWS Lambda microservices for JWT authentication, content management, image processing in S3 and automatic publishing with deployment on GitHub Pages. Atomic Design, role-based access control and CI/CD with GitHub Actions. Technologies: Next.js 15, React 19, AWS Lambda, DynamoDB, S3, GitHub Actions. www.ataraxiapro.com",
 
     educationTitle: "ACADEMIC BACKGROUND",

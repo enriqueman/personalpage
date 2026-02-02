@@ -529,7 +529,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
     y = addText(doc, a.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, color: COLORS.dark, align: "justify", ...useAutoPageBreakPage1 })
     y += 4
     setColor(doc, COLORS.lightGray)
-    y = addTextItalic(doc, `Period: ${a.period}`, x, y, maxWidth, { color: COLORS.lightGray })
+    y = addTextItalic(doc, `${data.periodLabel}: ${a.period}`, x, y, maxWidth, { color: COLORS.lightGray })
     y += 3
     setColor(doc, COLORS.dark)
   }
@@ -552,7 +552,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
   y = addText(doc, academic3.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
   setColor(doc, COLORS.lightGray)
-  y = addTextItalic(doc, `Period: ${academic3.period}`, x, y, maxWidth, { ...useAutoPageBreak, color: COLORS.lightGray })
+  y = addTextItalic(doc, `${data.periodLabel}: ${academic3.period}`, x, y, maxWidth, { ...useAutoPageBreak, color: COLORS.lightGray })
   y += 3
   setColor(doc, COLORS.dark)
 
@@ -564,7 +564,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
   }
   // Proyecto 1
   y += 6
-  y = addTextBold(doc, "Personal web portfolio", x, y, maxWidth, useAutoPageBreak)
+  y = addTextBold(doc, data.proj1Title || "Personal web portfolio", x, y, maxWidth, useAutoPageBreak)
   y += 4
   y = addText(doc, data.proj1, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
@@ -574,7 +574,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
   setColor(doc, COLORS.dark)
   // Proyecto 2
   y += 6
-  y = addTextBold(doc, "Ataraxia Blog Management and Publishing System", x, y, maxWidth, useAutoPageBreak)
+  y = addTextBold(doc, data.proj2Title || "Ataraxia Blog Management and Publishing System", x, y, maxWidth, useAutoPageBreak)
   y += 4
   y = addText(doc, data.proj2, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
