@@ -1,14 +1,18 @@
 "use client"
+
 import Link from "next/link"
-import { useState } from "react"
+import { usePathname } from "next/navigation"
+import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
+import { DownloadCVButton } from "@/components/download-cv-button"
 import { useLanguage } from "@/components/language-provider"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
   const { t } = useLanguage()
 
   const navItems = [
@@ -19,94 +23,102 @@ export default function Header() {
     { name: t("nav.projects"), path: "/projects" },
   ]
 
+  const isActive = (path) => (path === "/" ? pathname === "/" : pathname.startsWith(path))
+
+  // Cerrar menú al cambiar ruta o con Escape
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") setIsMenuOpen(false)
+    }
+    if (isMenuOpen) {
+      document.addEventListener("keydown", handleEscape)
+      document.body.style.overflow = "hidden"
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEscape)
+      document.body.style.overflow = ""
+    }
+  }, [isMenuOpen])
+
   return (
-    <header className="bg-background border-b border-border fixed top-0 left-0 right-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
-          <div className="flex justify-start lg:w-0 lg:flex-1">
+    <header className="relative sticky top-0 left-0 right-0 z-50 h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      {/* Línea de acento inferior (mismo lenguaje que footer y section-accent) */}
+      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary/60 to-transparent" aria-hidden />
+
+      <div className="container relative mx-auto flex h-full max-w-content items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className="link-underline text-lg font-bold text-foreground hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-md"
+        >
+          Enrique Manzano
+        </Link>
+
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8" aria-label="Navegación principal">
+          {navItems.map((item) => (
             <Link
-              href="/"
-              className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-300"
+              key={item.name}
+              href={item.path}
+              className={`link-underline text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-md ${isActive(item.path) ? "nav-link-active text-primary" : "text-muted-foreground hover:text-foreground"}`}
             >
-              Enrique Manzano
+              {item.name}
             </Link>
-          </div>
-          <div className="-mr-2 -my-2 md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
-          <nav className="hidden md:flex space-x-10">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.path}
-                className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors duration-300"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-4">
-            <LanguageToggle />
-            <ThemeToggle />
-            <Button asChild>
-              <Link href="/contact" className="whitespace-nowrap">
-                {t("nav.contact")}
-              </Link>
-            </Button>
-          </div>
+          ))}
+        </nav>
+
+        <div className="hidden md:flex items-center justify-end gap-3">
+          <LanguageToggle />
+          <ThemeToggle />
+          <DownloadCVButton variant="outline" size="default" className="rounded-lg btn-interactive" showLabel={true} />
+          <Button asChild size="default" className="rounded-lg btn-interactive">
+            <Link href="/#contact" className="whitespace-nowrap">
+              {t("nav.contact")}
+            </Link>
+          </Button>
+        </div>
+
+        <div className="flex md:hidden items-center gap-2">
+          <LanguageToggle />
+          <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 rounded-lg btn-interactive"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
       </div>
 
-      {/* Mobile menu, show/hide based on menu state */}
+      {/* Panel móvil: mismo tono secondary y acento que el resto de la página */}
       {isMenuOpen && (
-        <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
-          <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-background divide-y-2 divide-border">
-            <div className="pt-5 pb-6 px-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Link href="/" className="text-2xl font-bold text-foreground">
-                    Enrique Manzano
-                  </Link>
-                </div>
-                <div className="-mr-2 flex items-center">
-                  <LanguageToggle />
-                  <ThemeToggle />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setIsMenuOpen(false)}
-                    aria-label="Cerrar menú"
-                    className="ml-2"
-                  >
-                    <X className="h-6 w-6" />
-                  </Button>
-                </div>
-              </div>
-              <div className="mt-6">
-                <nav className="grid gap-y-8">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.path}
-                      className="-m-3 p-3 flex items-center rounded-md hover:bg-secondary"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <span className="ml-3 text-base font-medium text-foreground">{item.name}</span>
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-            </div>
-            <div className="py-6 px-5 space-y-6">
-              <Button asChild className="w-full">
-                <Link href="/contact">{t("nav.contact")}</Link>
+        <div
+          className="fixed inset-0 top-16 z-40 md:hidden stats-strip border-t border-border"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menú de navegación"
+        >
+          <div className="relative flex flex-col h-full overflow-auto px-4 py-6 hero-bg">
+            <nav className="flex flex-col gap-1" aria-label="Navegación móvil">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  className={`rounded-lg px-4 py-3 text-base font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${isActive(item.path) ? "bg-primary/10 text-primary border-l-4 border-l-primary" : "text-foreground hover:bg-secondary/80 border-l-4 border-l-transparent"}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+            <div className="mt-6 pt-6 border-t border-border flex flex-col gap-3">
+              <DownloadCVButton variant="outline" className="w-full rounded-lg btn-interactive" size="lg" showLabel={true} />
+              <Button asChild className="w-full rounded-lg btn-interactive" size="lg">
+                <Link href="/#contact" onClick={() => setIsMenuOpen(false)}>
+                  {t("nav.contact")}
+                </Link>
               </Button>
             </div>
           </div>
