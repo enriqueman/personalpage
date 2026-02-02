@@ -34,7 +34,7 @@ const COLORS = {
 }
 
 // Tamaños y espaciados (spec)
-const PHOTO_SIZE = 80
+const PHOTO_SIZE = 60
 const NAME_SIZE = 28
 const SUBTITLE_SIZE = 11
 const SECTION_TITLE_SIZE = 12
@@ -330,10 +330,11 @@ function drawRightColumn(doc, data, imageBase64, contactIcons = {}) {
   const wItem = RIGHT_COL_WIDTH - RIGHT_COL_PADDING_ITEM
   let y = MARGIN_TOP
 
-  // Foto 80x80, sin borde ni fondo
+  // Foto centrada en la columna derecha
   if (imageBase64) {
     try {
-      doc.addImage(imageBase64, "PNG", x, y, PHOTO_SIZE, PHOTO_SIZE)
+      const photoX = x + (w - PHOTO_SIZE) / 2
+      doc.addImage(imageBase64, "PNG", photoX, y, PHOTO_SIZE, PHOTO_SIZE)
     } catch (_) {}
     y += PHOTO_SIZE + 12
   }
@@ -341,14 +342,14 @@ function drawRightColumn(doc, data, imageBase64, contactIcons = {}) {
   const lineHeight = 1.3
   const betweenLines = 4
 
-  // CONTACT: cada ítem con iconos de public/icons (fallback Zapf/badge)
+  // CONTACT: orden — email, teléfono, ubicación, web, LinkedIn, GitHub
   y = addRightSectionTitle(doc, data.contactTitle, xTitle, y, wTitle)
   const contactGap = 3
+  y = addContactItem(doc, "email", data.email, xItem, y, wItem, contactIcons)
+  y += contactGap
   y = addContactItem(doc, "phone", data.phone, xItem, y, wItem, contactIcons)
   y += contactGap
   y = addContactItem(doc, "location", data.location, xItem, y, wItem, contactIcons)
-  y += contactGap
-  y = addContactItem(doc, "email", data.email, xItem, y, wItem, contactIcons)
   y += contactGap
   y = addContactItem(doc, "web", data.web, xItem, y, wItem, contactIcons)
   y += contactGap
