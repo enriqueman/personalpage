@@ -169,7 +169,7 @@ function addLeftSectionTitle(doc, text, x, y, maxWidth, data, state) {
     if (state) state.softSkillsDrawnInRightColumn = true
     y = MARGIN_TOP
   }
-  y += 12 // espaciado superior 12 mm
+  y += 6 // espaciado superior 11 mm (antes 12)
   doc.setFontSize(SECTION_TITLE_SIZE)
   doc.setFont(FONT, "bold")
   setColor(doc, COLORS.blue)
@@ -271,7 +271,7 @@ function addPage2SectionTitle(doc, text, x, y, maxWidth, data, state) {
     if (state) state.softSkillsDrawnInRightColumn = true
     y = MARGIN_TOP
   }
-  y += 12
+  y += 6 // espaciado superior 11 mm (antes 12)
   doc.setFontSize(SECTION_TITLE_SIZE)
   doc.setFont(FONT, "bold")
   setColor(doc, COLORS.blue)
@@ -529,7 +529,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
     y = addText(doc, a.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, color: COLORS.dark, align: "justify", ...useAutoPageBreakPage1 })
     y += 4
     setColor(doc, COLORS.lightGray)
-    y = addTextItalic(doc, `${data.periodLabel}: ${a.period}`, x, y, maxWidth, { color: COLORS.lightGray })
+    y = addTextItalic(doc, `${data.periodLabel}: ${a.period}`, x + bulletIndent, y, maxWidth - bulletIndent, { color: COLORS.lightGray })
     y += 3
     setColor(doc, COLORS.dark)
   }
@@ -552,7 +552,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
   y = addText(doc, academic3.desc, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
   setColor(doc, COLORS.lightGray)
-  y = addTextItalic(doc, `${data.periodLabel}: ${academic3.period}`, x, y, maxWidth, { ...useAutoPageBreak, color: COLORS.lightGray })
+  y = addTextItalic(doc, `${data.periodLabel}: ${academic3.period}`, x + bulletIndent, y, maxWidth - bulletIndent, { ...useAutoPageBreak, color: COLORS.lightGray })
   y += 3
   setColor(doc, COLORS.dark)
 
@@ -569,7 +569,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
   y = addText(doc, data.proj1, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
   setColor(doc, COLORS.blue)
-  y = addText(doc, "www.enriquemv.com", x, y, maxWidth, { fontSize: BODY_SMALL, ...useAutoPageBreak })
+  y = addText(doc, `${data.webPageLabel || "Web page"} ${data.proj1Url || "www.enriquemv.com"}`, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SMALL, ...useAutoPageBreak })
   y += 3
   setColor(doc, COLORS.dark)
   // Proyecto 2
@@ -579,7 +579,7 @@ function buildPdf(lang, imageBase64, contactIcons = {}) {
   y = addText(doc, data.proj2, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SIZE, lineHeightRatio: 1.3, align: "justify", ...useAutoPageBreak })
   y += 4
   setColor(doc, COLORS.blue)
-  y = addText(doc, "www.ataraxiapro.com", x, y, maxWidth, { fontSize: BODY_SMALL, ...useAutoPageBreak })
+  y = addText(doc, `${data.webPageLabel || "Web page"} ${data.proj2Url || "www.ataraxiapro.com"}`, x + bulletIndent, y, maxWidth - bulletIndent, { fontSize: BODY_SMALL, ...useAutoPageBreak })
   y += 3
   setColor(doc, COLORS.dark)
 
